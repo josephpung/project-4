@@ -22,8 +22,8 @@ yarn install
 
 
 ## To Do List
-- | Description | Importance | Due Date
----|  -------- | :---: | ---  
+No. | Description | Importance | Due Date
+--------  |--- | :---: | ---  
   1| Come up with basic layout|**HIGH** | 22/11/2017(Wednesday)
 
 ## Potential Improvements
