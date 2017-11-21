@@ -16,7 +16,7 @@ We bring you the solution, an all in one app that solves all of that.
 yarn install
 ```
 ## ERD
-![](/public/images/ERD.png)
+![](public/assets/images/ERD.png)
 
 ## User Stories
 
