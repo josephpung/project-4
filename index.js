@@ -16,4 +16,18 @@ app.get('/', function(req, res) {
  })
 });
 
+app.get('/register', function(req, res) {
+  res.render('users/register',{
+    title: "Register Page"
+
+ })
+});
+
+app.get('/login', function(req, res) {
+  res.render('users/login',{
+    title: "Login Page"
+
+ })
+});
+
 app.listen(3000)
