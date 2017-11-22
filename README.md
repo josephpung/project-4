@@ -1,4 +1,6 @@
-![](/public/assets/images/logo.png)
+<p align="center">
+  ![](/public/assets/images/logo.png)
+</p>
 
 [Live Link (To be added asap)](www.potato.com)
 ### Description
