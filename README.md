@@ -1,4 +1,4 @@
-## Project 4(Need to name our app guys)
+![](/public/assets/images/logo.png)
 
 [Live Link (To be added asap)](www.potato.com)
 ### Description
