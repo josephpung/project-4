@@ -2,9 +2,9 @@
 
 [Live Link (To be added asap)](www.potato.com)
 ### Description
-Not sure if the place you want to eat at has seats? Tired of waiting for staff to serve you a menu or bring you your bill?
+The service industry has not had the best in terms of technological advancements, an app to solve each problem, from queues to reservations to the traditional POS system.
 
-We bring you the solution, an all in one app that solves all of that.
+We bring to you the all in one, from payment to reservation to seeing the current orders or customers in the queue. No more walking from one end of the restaurant to the other just to check the POS, now you can do everything from one device.
 
 ### Team Members
 * [Yuki](https://github.com/yukitsuboniwa)
@@ -22,12 +22,16 @@ yarn install
 
 
 ## To Do List
-No. | Description | Importance | Due Date
---------  |--- | :---: | ---  
-1| Come up with basic layout| **HIGH** | 22/11/2017(Wednesday)
-2| Come up with basic working user interface | Medium | 24/11 (Friday)
-3| Come up with database models| Medium | 24/11 (Friday)
-4| Come up with working staff/owner interface | Medium | 24/11 (Friday)
+No. | Description | Importance | Due Date | PIC
+--------  |--- | :---: | --- | --  
+1| Come up with basic working user interface | Medium | 24/11 (Friday) | NIL
+2| Come up with working staff/owner interface | Medium | 24/11 (Friday) | NIL
+3| Add kitchen interface with orders and capability to modify orders | Medium | 24/11 (Friday) | NIL
+4| Functioning POS system | **HIGH** | 25/11 (Sat) | NIL
+5| Integrate React | **HIGH** | ASAP | NIL
+**No.** | **Completed Tasks** | -- | **Completion Date** | --
+1| ~~Come up with database models~~| Medium | 22/11 (Wed)| Jo
+2| ~~Come up with basic layout~~| **HIGH** | 22/11/2017(Wed) | -
 
 ## Potential Improvements
-* TBD
+* Add Queue and Reservation system
