@@ -1,5 +1,5 @@
 <p align="center">
-  ![](/public/assets/images/logo.png)
+  <img src="/public/assets/images/logo.png">
 </p>
 
 [Live Link (To be added asap)](www.potato.com)
