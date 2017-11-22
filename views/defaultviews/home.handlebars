@@ -1,5 +1,55 @@
-<<<<<<< HEAD
+<div class="divider"></div>
+<div class="row">
+  <h3>Restaurants in Database</h3>
+  {{#each resto }}
+  <ul>
+    <li>{{this.name}}</li>
+  </ul>
+  {{/each}}
+</div>
+<div class="divider"></div>
+<div class="row">
+  <h2 class="center">Testing adding a Restaurant</h2>
+    <form class="col s12" method="POST" action="/addrestaurant">
+      <div class="row">
+        <div class="input-field col s6">
+          <input placeholder="e.g Stranger's Reunion" id="res_name" type="text" name="name">
+          <label for="res_name">Restaurant Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="res_cuisine" type="text" name="cuisine">
+          <label for="res_cuisine">Cuisine</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="password" type="tel" name="contact">
+          <label for="password">Phone Number</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="res_address" type="text" name="address">
+          <label for="res_address">Address</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          Backup field in case we wanna add anything else
+          <div class="input-field inline">
+            <input id="email" type="email" class="validate">
+            <label for="email" data-error="wrong" data-success="right">Sample</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" type="submit" name="button">Add</button>
 
+      </div>
+    </form>
+  </div>
+
+{{!--
     <div class="parallax-container">
       <h1 class="center">Main header</h1>
       <div class="parallax"><img src="https://hdwallsource.com/img/2014/4/background-wallpaper-22922-23558-hd-wallpapers.jpg"></div>
@@ -11,7 +61,4 @@
     </div>
     <div class="parallax-container">
       <div class="parallax"><img src="https://www.walldevil.com/wallpapers/a77/desktop-background-romania-park-carol-wallpaper-picture-mypicture.jpg"></div>
-    </div>
-=======
-<h3>Home</h3><br>
->>>>>>> 27a238a185701a83329ec12b06175ce97df8b1ff
+    </div> --}}
