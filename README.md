@@ -24,7 +24,10 @@ yarn install
 ## To Do List
 No. | Description | Importance | Due Date
 --------  |--- | :---: | ---  
-  1| Come up with basic layout|**HIGH** | 22/11/2017(Wednesday)
+1| Come up with basic layout| **HIGH** | 22/11/2017(Wednesday)
+2| Come up with basic working user interface | Medium | 24/11 (Friday)
+3| Come up with database models| Medium | 24/11 (Friday)
+4| Come up with working staff/owner interface | Medium | 24/11 (Friday)
 
 ## Potential Improvements
 * TBD
