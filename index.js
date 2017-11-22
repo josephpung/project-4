@@ -30,4 +30,11 @@ app.get('/login', function(req, res) {
  })
 });
 
+app.get('/profile', function(req, res) {
+  res.render('users/profile',{
+    title: "Profile Page"
+
+ })
+});
+
 app.listen(8000)
