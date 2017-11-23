@@ -18,7 +18,7 @@ We bring to you the all in one, from payment to reservation to seeing the curren
 yarn install
 ```
 ## ERD
-![](public/assets/images/ERD.png)
+![](public/assets/images/ERD(2).png)
 
 ## User Stories
 
