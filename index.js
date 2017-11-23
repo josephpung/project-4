@@ -20,7 +20,13 @@ var hbs = exphbs.create({
         if (String(first) === String(second)) {
           return options.fn(this)
         }
-      }
+      },
+      times: function(n, block) {
+    var accum = '';
+    for(var i = 0; i < n; ++i)
+        accum += block.fn(i);
+    return accum;
+}
     }
 })
 //======= Set up handlebars
@@ -57,6 +63,16 @@ app.use(bodyParser.urlencoded({
 
 //Access models
 const Restaurant = require("./models/restaurant")
+
+app.get("/staff", (req,res)=>{
+  Restaurant.findOne({"name":"Restaurant 3"})
+  .then(resto=>{
+    res.render("owners/main",{
+      title: "Staff Page",
+      resto
+    })
+  })
+})
 app.get('/', function(req, res) {
   Restaurant.find()
   .then(resto=>{
@@ -87,8 +103,8 @@ app.post("/addrestaurant", (req,res)=>{
     name: req.body.name,
     cuisine: req.body.cuisine,
     address: req.body.address,
-    contact: req.body.contact
-
+    contact: req.body.contact,
+    tables: req.body.tableNo
 
   })
 
