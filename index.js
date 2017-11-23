@@ -23,6 +23,28 @@ var hbs = exphbs.create({
       }
     }
 })
+
+var stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j');
+
+// Create a new customer and then a new charge for that customer:
+stripe.customers.create({
+  email: 'yuki@test.com'
+}).then(function(customer){
+  return stripe.customers.createSource(customer.id, {
+    source: 'tok_visa'
+  });
+}).then(function(source) {
+  return stripe.charges.create({
+    amount: 10000,
+    currency: 'usd',
+    customer: source.customer
+  });
+}).then(function(charge) {
+  // New charge created on a new customer
+}).catch(function(err) {
+  // Deal with an error
+});
+
 //======= Set up handlebars
 // app.engine('handlebars', exphbs({defaultLayout:'main'}))
 app.engine('handlebars', hbs.engine)
