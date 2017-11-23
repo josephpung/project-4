@@ -3,7 +3,8 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcrypt')
 
 const transactionSchema = new Schema({
-  order_id: String, required: true,
+  order_id: {type: String, required: true},
+  user_id: Array,
   status: String
 
 })
