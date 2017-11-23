@@ -24,26 +24,28 @@ var hbs = exphbs.create({
     }
 })
 
-var stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j');
+// stripe payment
+const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret key must be in .env file
 
-// Create a new customer and then a new charge for that customer:
-stripe.customers.create({
-  email: 'yuki@test.com'
-}).then(function(customer){
-  return stripe.customers.createSource(customer.id, {
-    source: 'tok_visa'
-  });
-}).then(function(source) {
-  return stripe.charges.create({
-    amount: 10000,
-    currency: 'usd',
-    customer: source.customer
-  });
-}).then(function(charge) {
-  // New charge created on a new customer
-}).catch(function(err) {
-  // Deal with an error
-});
+app.post('/charge', function(req, res) {
+  stripe.customers.create({
+    email: 'testUSD@email.com'
+    }).then(function(customer){
+    return stripe.customers.createSource(customer.id, {
+      source: 'tok_visa'
+    })
+    }).then(function(source) {
+    return stripe.charges.create({
+      amount: 1000,
+      currency: 'usd',
+      customer: source.customer
+    })
+  }).then(function(charge) {
+    res.send("completed payment!")
+  }).catch(function(err) {
+    res.send("error!")
+  })
+})
 
 //======= Set up handlebars
 // app.engine('handlebars', exphbs({defaultLayout:'main'}))
@@ -120,9 +122,9 @@ app.post("/addrestaurant", (req,res)=>{
   })
 })
 
-app.get('/profile', function(req, res) {
-  res.render('users/profile',{
-    title: "Profile Page"
+app.get('/payment', function(req, res) {
+  res.render('defaultviews/payment',{
+    title: "Payment Page"
 
  })
 });
