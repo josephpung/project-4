@@ -8,6 +8,17 @@
   {{/each}}
 </div>
 <div class="divider"></div>
+<div class="container">
+  Orders for Restaurant No.1
+    {{#each table}}
+    {{#each this.dishes}}
+    <li>{{this}}</li>
+    {{/each}}
+    {{/each}}
+  {{!-- {{#each order.dishes}}
+
+  {{/each}} --}}
+</div>
 <div class="row">
   <h2 class="center">Testing adding a Restaurant</h2>
     <form class="col s12" method="POST" action="/addrestaurant">
@@ -47,17 +58,12 @@
       </div>
     </form>
   </div>
+  <div class="row">
+    <h2 class="center">Test Adding orders(Restaurant must exist)</h2>
+      <form class="col s12" method="POST" action="/addtableorder">
+        <div class="row">
+        <button class="btn" type="submit" name="button">Add Order </button>
 
-{{!--
-    <div class="parallax-container">
-      <h1 class="center">Main header</h1>
-      <div class="parallax"><img src="https://hdwallsource.com/img/2014/4/background-wallpaper-22922-23558-hd-wallpapers.jpg"></div>
-    </div>
-    <div class="container">
-      <form class="" action="index.html" method="post">
-        <label for="name">Name</label>
+        </div>
       </form>
     </div>
-    <div class="parallax-container">
-      <div class="parallax"><img src="https://www.walldevil.com/wallpapers/a77/desktop-background-romania-park-carol-wallpaper-picture-mypicture.jpg"></div>
-    </div> --}}

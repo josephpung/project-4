@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt')
 
 const transactionSchema = new Schema({
   order_id: {type: String, required: true},
-  user_id: Array,
+  user_id: String,
+  table_number: String,
   status: String
 
 })

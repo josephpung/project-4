@@ -63,7 +63,9 @@ app.use(bodyParser.urlencoded({
 
 //Access models
 const Restaurant = require("./models/restaurant")
+const Restotable = require("./models/restotable")
 
+////
 app.get("/staff", (req,res)=>{
   Restaurant.findOne({"name":"Restaurant 3"})
   .then(resto=>{
@@ -76,12 +78,18 @@ app.get("/staff", (req,res)=>{
 app.get('/', function(req, res) {
   Restaurant.find()
   .then(resto=>{
+
+    Restotable.find("restaurant_id=1")
+    .then(table=>{
+
     res.render('defaultviews/home',{
       title: "Home Page",
-      resto
+      resto,
+      table
 
    })
-  })
+ })
+})
 
 });
 
@@ -109,6 +117,22 @@ app.post("/addrestaurant", (req,res)=>{
   })
 
   newRes.save()
+  .then(()=>{
+    res.redirect("/")
+  })
+})
+
+app.post('/addtableorder', (req,res)=>{
+  let newTable = new Restotable({
+    user_id: 1,
+    restaurant_id: 1,
+    transaction_id: 12,
+    table_number: 3,
+    dishes: [123,223,4432],
+    status: "cooked"
+  })
+
+  newTable.save()
   .then(()=>{
     res.redirect("/")
   })
