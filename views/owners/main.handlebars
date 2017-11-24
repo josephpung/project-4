@@ -1,14 +1,13 @@
 <div class="row">
-  {{#each resto}}
-  {{#times this.tables}}
+  {{#each tableorders}}
 <div class="col s3">
-  TABLE HERE
+  <a href={{this.id}}>View</a>
+  {{this.dishes}}
 </div>
-  {{/times}}
   {{/each}}
 </div>
 <div class="row">
   <div class="col s6">
-    Open Orders: {{resto}}
+    {{!-- Open Orders: {{resto}} --}}
   </div>
 </div>

@@ -91,11 +91,15 @@ const Restotable = require("./models/restotable")
 
 ////
 app.get("/staff", (req,res)=>{
-  Restaurant.findOne({"name":"Restaurant 3"})
+  Restaurant.findById("5a16f5af351a2b1ea8904b1f")
   .then(resto=>{
-    res.render("owners/main",{
-      title: "Staff Page",
-      resto
+    Restotable.find(`restaurant_id=${resto.id}`)
+    .then(tableorders=>{
+      res.render("owners/main",{
+        title: "Staff Page",
+        resto,
+        tableorders
+      })
     })
   })
 })
@@ -153,7 +157,7 @@ app.post('/addtableorder', (req,res)=>{
     restaurant_id: 1,
     transaction_id: 12,
     table_number: 3,
-    dishes: [123,223,4432],
+    dishes: ["empty"],
     status: "cooked"
   })
 
