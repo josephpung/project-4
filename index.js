@@ -29,6 +29,30 @@ var hbs = exphbs.create({
 }
     }
 })
+
+// stripe payment
+const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret key must be in .env file
+
+app.post('/charge', function(req, res) {
+  stripe.customers.create({
+    email: 'testUSD@email.com'
+    }).then(function(customer){
+    return stripe.customers.createSource(customer.id, {
+      source: 'tok_visa'
+    })
+    }).then(function(source) {
+    return stripe.charges.create({
+      amount: 1000,
+      currency: 'usd',
+      customer: source.customer
+    })
+  }).then(function(charge) {
+    res.send("completed payment!")
+  }).catch(function(err) {
+    res.send("error!")
+  })
+})
+
 //======= Set up handlebars
 // app.engine('handlebars', exphbs({defaultLayout:'main'}))
 app.engine('handlebars', hbs.engine)
@@ -122,6 +146,7 @@ app.post("/addrestaurant", (req,res)=>{
   })
 })
 
+
 app.post('/addtableorder', (req,res)=>{
   let newTable = new Restotable({
     user_id: 1,
@@ -137,5 +162,12 @@ app.post('/addtableorder', (req,res)=>{
     res.redirect("/")
   })
 })
+
+app.get('/payment', function(req, res) {
+  res.render('defaultviews/payment',{
+    title: "Payment Page"
+
+ })
+});
 
 app.listen(8000)
