@@ -12,6 +12,6 @@ const restotableSchema = new Schema({
 
 })
 
-const Order = mongoose.model("Restotable", restotableSchema)
+const Restotable = mongoose.model("Restotable", restotableSchema)
 
-module.exports = Order
+module.exports = Restotable
