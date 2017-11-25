@@ -1,0 +1,28 @@
+
+<table>
+  <thead>
+    <tr>
+        <th>No.</th>
+        <th>Food Item</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Amount</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each newDishesOrdered as |dishes|}}
+    <tr>
+        {{!-- cant nest 2 #each statements
+        lookup helps you to access another array by each index
+        --}}
+        {{!-- <td>{{lookup ../quantityValue @index}}</td> --}}
+        <td>{{sum @index 1}}</td>
+        <td>{{dishes.name}}</td>
+        <td>{{dishes.price}}</td>
+        <td>{{dishes.amount}}</td>
+        <td>{{multiply dishes.price dishes.amount }}</td>
+    </tr>
+      {{/each}}
+  </tbody>
+</table>

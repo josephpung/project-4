@@ -10,6 +10,8 @@ const flash = require("connect-flash")
 const app = express()
 require("dotenv").config({silent: true})
 
+
+
 var hbs = exphbs.create({
     defaultLayout: 'main',
     helpers      : {
@@ -58,6 +60,10 @@ app.post('/charge', function(req, res) {
 app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
 
+// handlebars helper
+var helpers = require('handlebars-helpers')
+var math = helpers.math()
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 const mongoose = require('mongoose')
@@ -74,6 +80,10 @@ app.use(session({
 }))
 // ====== set up flash ======
 app.use(flash())
+app.use((req, res, next) => {
+  app.locals.user = req.user
+  next()
+})
 // setup methodOverride
 app.use(methodOverride('_method'))
 //=== Setup passport
@@ -88,6 +98,10 @@ app.use(bodyParser.urlencoded({
 //Access models
 const Restaurant = require("./models/restaurant")
 const Restotable = require("./models/restotable")
+const User = require('./models/user')
+const Item = require('./models/item')
+
+
 
 ////
 app.get("/staff", (req,res)=>{
@@ -120,20 +134,45 @@ app.get('/', function(req, res) {
 })
 
 });
+app.get('/register', function (req, res) {
+  res.render('users/register', {
+    title: 'Register Page'
 
-app.get('/register', function(req, res) {
-  res.render('users/register',{
-    title: "Register Page"
+  })
+})
 
- })
-});
+app.post('/register', (req, res) => {
+  var formData = req.body.user
+  var newUser = new User({
+    name: formData.name,
+    email: formData.email,
+    password: formData.password
+  })
+  newUser.save()
+  .then((newUser) => {
+    passport.authenticate('local', {
+      successRedirect: '/'
+    })(req, res)
+  },
+  err => {
+    console.log('err')
+    res.redirect('users/register')
+  })
+})
 
 app.get('/login', function(req, res) {
   res.render('users/login',{
     title: "Login Page"
 
  })
-});
+})
+
+app.post('/login', passport.authenticate('local'), (req, res) => {
+  console.log('successfuly log in')
+  res.redirect(`/`)
+})
+
+
 app.post("/addrestaurant", (req,res)=>{
   let newRes = new Restaurant({
     name: req.body.name,
@@ -167,6 +206,86 @@ app.post('/addtableorder', (req,res)=>{
   })
 })
 
+app.get('/order', (req, res) => {
+  const Item = require('./models/item')
+  Item.find()
+  .then(menuItem => {
+    res.render('users/order', {
+      title: 'Order Page',
+      menuItem
+    })
+  })
+})
+
+
+app.post('/addMenuToOrder', (req, res) => {
+  let user = req.user
+  if (!user) {
+    console.log('User is not Logged in')
+    res.redirect('/login')
+  }
+  let formData = req.body.foods
+  let newArray = []
+  for (const prop in formData) {
+    if (formData[prop] !== '0') {
+      let dish = {}
+      dish[`${prop}`] = `${formData[prop]}`
+      newArray.push(dish)
+    }
+  }
+  let newOrder = new Restotable({
+    dishes: newArray,
+    user_id: `${user.id}`
+  })
+  newOrder.save()
+  .then((order) => {
+    res.redirect('/pay')
+  })
+})
+
+app.get('/pay', (req, res) => {
+  Restotable.findOne({
+    user_id: req.user.id
+  })
+  .then(order => {
+    console.log(order)
+    // extract all the dishes ID from dishes ordered array
+    let dishesOrdered = order.dishes
+    let dishArr = []
+    let quantityOrder = []
+    dishesOrdered.map(oneDish => {
+      for (const prop in oneDish) {
+        dishArr.push(prop)
+        let dish = {}
+        dish['amount'] = `${oneDish[prop]}`
+        quantityOrder.push(dish)
+        // quantityOrder.push(Number(oneDish[prop]))
+      }
+    })
+    // find all dishes that was ordered from Item array
+    Item.find({
+      _id: {$in: dishArr}
+    })
+      .then(dishesOrdered => {
+        let newDishesOrdered = []
+        // in order for us to do complex multiplication, i had to merged quantity ordered
+        // with our dishesOrdered array
+        dishesOrdered = dishesOrdered.map((eachDish, index) => {
+          let obj2 = quantityOrder[index]
+          const merged = Object.assign(JSON.parse(JSON.stringify(eachDish)), obj2)
+          newDishesOrdered.push(merged)
+        })
+        res.render('users/pay', {
+          title: 'Current Bill',
+          newDishesOrdered,
+          math,
+          quantityOrder
+        })
+      })
+  })
+})
+
+
 app.get('/payment', function(req, res) {
   res.render('defaultviews/payment',{
     title: "Payment Page"
@@ -174,4 +293,6 @@ app.get('/payment', function(req, res) {
  })
 });
 
-app.listen(8000)
+app.listen(8000, () => {
+  'connected to port 8000 successfully'
+})

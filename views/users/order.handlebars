@@ -1,0 +1,21 @@
+<h3>GOT TO ORDER MY FOOD BABY</h3><br>
+
+<div class="divider"></div>
+<div class="row">
+  <h3>CHICKEN UP MENU ITEM</h3>
+  <form class="col s12" action="/addMenuToOrder" method="post">
+    {{#each menuItem }}
+    <ul>
+      <li>
+        {{this.name}} - {{this.category}} - {{this.price}}
+          <select name="foods[{{this.id}}]">
+            <option value="0" selected>0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+      </li>
+    </ul>
+    {{/each}}
+    <button class="button is-medium is-light" type="submit">Confirm Order</button>
+  </form>
+</div>
