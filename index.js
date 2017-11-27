@@ -1,61 +1,60 @@
-const exphbs = require("express-handlebars")
-const express = require("express")
-const path = require("path")
+const exphbs = require('express-handlebars')
+const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
-const session = require("express-session")
-const MongoStore = require("connect-mongo")(session)
-const passport = require("./config/ppConfig")
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const passport = require('./config/ppConfig')
 const methodOverride = require('method-override')
-const flash = require("connect-flash")
+const flash = require('connect-flash')
 const app = express()
-require("dotenv").config({silent: true})
-
-
+require('dotenv').config({silent: true})
 
 var hbs = exphbs.create({
-    defaultLayout: 'main',
-    helpers      : {
+  defaultLayout: 'main',
+  helpers: {
 
-      checkAdmin: function(first, second, options) {
-        console.log(first, second);
+    checkAdmin: function (first, second, options) {
+      console.log(first, second)
 
-        if (String(first) === String(second)) {
-          return options.fn(this)
-        }
-      },
-      times: function(n, block) {
-    var accum = '';
-    for(var i = 0; i < n; ++i)
-        accum += block.fn(i);
-    return accum;
-}
+      if (String(first) === String(second)) {
+        return options.fn(this)
+      }
+    },
+    times: function (n, block) {
+      var accum = ''
+      for (var i = 0; i < n; ++i) {
+        accum += block.fn(i)
+      }
+      return accum
     }
+  }
 })
 
 // stripe payment
 const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret key must be in .env file
 
-app.post('/charge', function(req, res) {
+app.post('/charge', function (req, res) {
   stripe.customers.create({
     email: 'testUSD@email.com'
-    }).then(function(customer){
+  }).then(function (customer) {
     return stripe.customers.createSource(customer.id, {
       source: 'tok_visa'
     })
-    }).then(function(source) {
+  }).then(function (source) {
     return stripe.charges.create({
       amount: 1000,
       currency: 'usd',
       customer: source.customer
     })
-  }).then(function(charge) {
-    res.send("completed payment!")
-  }).catch(function(err) {
-    res.send("error!")
+  }).then(function (charge) {
+    res.send('completed payment!')
+  }).catch(function (err) {
+    res.send('error!')
   })
 })
 
-//======= Set up handlebars
+// ======= Set up handlebars
 // app.engine('handlebars', exphbs({defaultLayout:'main'}))
 app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
@@ -64,7 +63,7 @@ app.set('view engine', 'handlebars')
 var helpers = require('handlebars-helpers')
 var math = helpers.math()
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')))
 
 const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost/proj4local', {
@@ -75,7 +74,7 @@ mongoose.Promise = global.Promise
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true, //saves session and stores it in DB
+  saveUninitialized: true, // saves session and stores it in DB
   store: new MongoStore({ mongooseConnection: mongoose.connection }) // store it in MongoDB, this requires mongo-connect to work
 }))
 // ====== set up flash ======
@@ -86,7 +85,7 @@ app.use((req, res, next) => {
 })
 // setup methodOverride
 app.use(methodOverride('_method'))
-//=== Setup passport
+// === Setup passport
 app.use(passport.initialize())
 app.use(passport.session())
 // ===== Set up bodyparser
@@ -95,45 +94,40 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-//Access models
-const Restaurant = require("./models/restaurant")
-const Restotable = require("./models/restotable")
+// Access models
+const Restaurant = require('./models/restaurant')
+const Restotable = require('./models/restotable')
 const User = require('./models/user')
 const Item = require('./models/item')
 
-
-
-////
-app.get("/staff", (req,res)=>{
-  Restaurant.findById("5a16f5af351a2b1ea8904b1f")
-  .then(resto=>{
+// //
+app.get('/staff', (req, res) => {
+  Restaurant.findById('5a16f5af351a2b1ea8904b1f')
+  .then(resto => {
     Restotable.find(`restaurant_id=${resto.id}`)
-    .then(tableorders=>{
-      res.render("owners/main",{
-        title: "Staff Page",
+    .then(tableorders => {
+      res.render('owners/main', {
+        title: 'Staff Page',
         resto,
         tableorders
       })
     })
   })
 })
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   Restaurant.find()
-  .then(resto=>{
+  .then(resto => {
+    Restotable.find('restaurant_id=1')
+    .then(table => {
+      res.render('defaultviews/home', {
+        title: 'Home Page',
+        resto,
+        table
 
-    Restotable.find("restaurant_id=1")
-    .then(table=>{
-
-    res.render('defaultviews/home',{
-      title: "Home Page",
-      resto,
-      table
-
-   })
- })
+      })
+    })
+  })
 })
-
-});
 app.get('/register', function (req, res) {
   res.render('users/register', {
     title: 'Register Page'
@@ -160,11 +154,11 @@ app.post('/register', (req, res) => {
   })
 })
 
-app.get('/login', function(req, res) {
-  res.render('users/login',{
-    title: "Login Page"
+app.get('/login', function (req, res) {
+  res.render('users/login', {
+    title: 'Login Page'
 
- })
+  })
 })
 
 app.post('/login', passport.authenticate('local'), (req, res) => {
@@ -172,8 +166,7 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.redirect(`/`)
 })
 
-
-app.post("/addrestaurant", (req,res)=>{
+app.post('/addrestaurant', (req, res) => {
   let newRes = new Restaurant({
     name: req.body.name,
     cuisine: req.body.cuisine,
@@ -184,25 +177,24 @@ app.post("/addrestaurant", (req,res)=>{
   })
 
   newRes.save()
-  .then(()=>{
-    res.redirect("/")
+  .then(() => {
+    res.redirect('/')
   })
 })
 
-
-app.post('/addtableorder', (req,res)=>{
+app.post('/addtableorder', (req, res) => {
   let newTable = new Restotable({
     user_id: 1,
     restaurant_id: 1,
     transaction_id: 12,
     table_number: 3,
-    dishes: ["empty"],
-    status: "cooked"
+    dishes: ['empty'],
+    status: 'cooked'
   })
 
   newTable.save()
-  .then(()=>{
-    res.redirect("/")
+  .then(() => {
+    res.redirect('/')
   })
 })
 
@@ -216,7 +208,6 @@ app.get('/order', (req, res) => {
     })
   })
 })
-
 
 app.post('/addMenuToOrder', (req, res) => {
   let user = req.user
@@ -285,14 +276,13 @@ app.get('/pay', (req, res) => {
   })
 })
 
+app.get('/payment', function (req, res) {
+  res.render('defaultviews/payment', {
+    title: 'Payment Page'
 
-app.get('/payment', function(req, res) {
-  res.render('defaultviews/payment',{
-    title: "Payment Page"
-
- })
-});
+  })
+})
 
 app.listen(8000, () => {
-  'connected to port 8000 successfully'
+  console.log('connected to port 8000 successfully')
 })
