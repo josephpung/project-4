@@ -85,11 +85,100 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+app.use((req,res,next)=>{
+  app.locals.currentUser = req.user ? req.user : null
+  next()
+})
 //Access models
 const Restaurant = require("./models/restaurant")
 const Restotable = require("./models/restotable")
+const User = require("./models/user")
 
+// allow cors
+var cors = require('cors')
+
+app.use(cors())
 ////
+
+// temp user endpoint
+
+app.get("/currentUser", (req,res)=>{
+  if (!req.user){
+    res.json({
+      user: "none"
+    })
+  }else{
+    res.json({
+      user: req.user
+    })
+  }
+})
+// testing registration
+app.post("/register", (req,res)=>{
+  var formData = req.body // if this is modified, change the landingpage fields as well as ppConfig
+  if(formData.email === "" || formData.name === "" ){
+    res.json({
+      error: true,
+      data: "missingFields"
+    })
+  // }else if(formData.passwordCfm !== formData.password){
+  //   req.flash("error","Passwords do not match, please try again")
+  //   res.redirect("/landingpage")
+  }else{
+    User.find({email: formData.email}).count()
+    .then(result=>{
+      if(result === 0){
+        let newUser = new User({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        })
+        newUser.save()
+        .then(user=>{
+          res.json({
+            error: false,
+            data: "registrationSuccess"
+          })
+        })
+      }else{
+        res.json({
+          error: true,
+          data: "registrationFailure_emailExists"
+        })
+      }
+    })
+  }
+})
+
+// testing Login
+app.post("/login", passport.authenticate("local",{
+  successRedirect: "/successjson",
+  failureRedirect: "/failurejson",
+  failureFlash: true
+})
+)
+// testing logout
+app.get('/logout', (req, res) => {
+  req.logout()
+  res.json({
+    status: "logoutSuccess"
+  })
+})
+
+app.get('/successjson', (req, res)=> {
+    res.json({
+      status: "loginSuccess",
+      userData: req.user
+    });
+});
+
+app.get('/failurejson', function(req, res) {
+    res.json({
+      status: "loginFailure",
+      message: 'failed to connect'
+     });
+});
+
 app.get("/staff", (req,res)=>{
   Restaurant.findById("5a16f5af351a2b1ea8904b1f")
   .then(resto=>{
