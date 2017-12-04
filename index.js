@@ -192,6 +192,7 @@ app.get("/staff", (req,res)=>{
     })
   })
 })
+
 app.get('/', function(req, res) {
   Restaurant.find()
   .then(resto=>{
@@ -223,6 +224,7 @@ app.get('/login', function(req, res) {
 
  })
 });
+
 app.post("/addrestaurant", (req,res)=>{
   let newRes = new Restaurant({
     name: req.body.name,
@@ -239,15 +241,14 @@ app.post("/addrestaurant", (req,res)=>{
   })
 })
 
-
 app.post('/addtableorder', (req,res)=>{
   let newTable = new Restotable({
     user_id: 1,
     restaurant_id: 1,
-    transaction_id: 12,
-    table_number: 3,
-    dishes: ["empty"],
-    status: "cooked"
+    transaction_id: 1,
+    table_number: 1,
+    dishes: ["Pizza # 1", "Pasta # 2"],
+    status: ""
   })
 
   newTable.save()
