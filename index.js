@@ -35,15 +35,15 @@ const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret k
 
 app.post('/charge', function(req, res) {
   stripe.customers.create({
-    email: 'testUSD@email.com'
+    email: 'yuki@email.com'
     }).then(function(customer){
     return stripe.customers.createSource(customer.id, {
       source: 'tok_visa'
     })
     }).then(function(source) {
     return stripe.charges.create({
-      amount: 1000,
-      currency: 'usd',
+      amount: 10000,
+      currency: 'sgd',
       customer: source.customer
     })
   }).then(function(charge) {
@@ -180,7 +180,7 @@ app.get('/failurejson', function(req, res) {
 });
 
 app.get("/staff", (req,res)=>{
-  Restaurant.findById("5a16f5af351a2b1ea8904b1f")
+  Restaurant.findById("5a1ed7560400ce4dd446f8d5")
   .then(resto=>{
     Restotable.find(`restaurant_id=${resto.id}`)
     .then(tableorders=>{
@@ -252,7 +252,8 @@ app.post('/addtableorder', (req,res)=>{
 
   newTable.save()
   .then(()=>{
-    res.redirect("/")
+    res.send("order is saved")
+    // res.redirect("/")
   })
 })
 
