@@ -67,7 +67,8 @@ app.set('view engine', 'handlebars')
 app.use(express.static(path.join(__dirname, 'public')));
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/proj4local', {
+// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/proj4local')
+mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/proj4local'), {
   useMongoClient: true
 })
 mongoose.Promise = global.Promise
