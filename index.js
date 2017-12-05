@@ -41,15 +41,15 @@ const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret k
 
 app.post('/charge', function(req, res) {
   stripe.customers.create({
-    email: 'testUSD@email.com'
+    email: 'yuki@email.com'
     }).then(function(customer){
     return stripe.customers.createSource(customer.id, {
       source: 'tok_visa'
     })
     }).then(function(source) {
     return stripe.charges.create({
-      amount: 1000,
-      currency: 'usd',
+      amount: 10000,
+      currency: 'sgd',
       customer: source.customer
     })
   }).then(function(charge) {
@@ -186,7 +186,7 @@ app.get('/failurejson', function(req, res) {
 });
 
 app.get("/staff", (req,res)=>{
-  Restaurant.findById("5a16f5af351a2b1ea8904b1f")
+  Restaurant.findById("5a1ed7560400ce4dd446f8d5")
   .then(resto=>{
     Restotable.find(`restaurant_id=${resto.id}`)
     .then(tableorders=>{
@@ -198,6 +198,7 @@ app.get("/staff", (req,res)=>{
     })
   })
 })
+
 app.get('/', function(req, res) {
   Restaurant.find()
   .then(resto=>{
@@ -229,6 +230,7 @@ app.get('/login', function(req, res) {
 
  })
 });
+
 app.post("/addrestaurant", (req,res)=>{
   let newRes = new Restaurant({
     name: req.body.name,
@@ -245,20 +247,20 @@ app.post("/addrestaurant", (req,res)=>{
   })
 })
 
-
 app.post('/addtableorder', (req,res)=>{
   let newTable = new Restotable({
     user_id: 1,
     restaurant_id: 1,
-    transaction_id: 12,
-    table_number: 3,
-    dishes: ["empty"],
-    status: "cooked"
+    transaction_id: 1,
+    table_number: 1,
+    dishes: ["Pizza # 1", "Pasta # 2"],
+    status: ""
   })
 
   newTable.save()
   .then(()=>{
-    res.redirect("/")
+    res.send("order is saved")
+    // res.redirect("/")
   })
 })
 
