@@ -8,8 +8,14 @@ const passport = require("./config/ppConfig")
 const methodOverride = require('method-override')
 const flash = require("connect-flash")
 const app = express()
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 require("dotenv").config({silent: true})
 
+
+
+
+// handlebar helpers
 var hbs = exphbs.create({
     defaultLayout: 'main',
     helpers      : {
@@ -263,4 +269,29 @@ app.get('/payment', function(req, res) {
  })
 });
 
-app.listen(8000)
+// sockets setup
+
+io.on('connection', (socket) => {
+  console.log('===> Socket Connected : ', socket.id)
+  socket.on('chat', (data) => {
+    console.log('frontend connection', data)
+  })
+  socket.on('submitOrder', (message) => {
+    console.log('from frontend connection', message)
+    io.emit("orderConfirmed",{
+      message: "test",
+      data: 123123123
+    })
+
+  socket.on('disconnect', () => {
+    console.log('===> Socket Disconnected : ', socket.id)
+  })
+})
+
+  // here you can start emitting events to the client
+});
+
+
+const port = 8000;
+// io.listen(port);
+server.listen(port)
