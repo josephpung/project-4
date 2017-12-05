@@ -275,9 +275,6 @@ app.get('/payment', function(req, res) {
 
 io.on('connection', (socket) => {
   console.log('===> Socket Connected : ', socket.id)
-  socket.on('chat', (data) => {
-    console.log('frontend connection', data)
-  })
   socket.on('submitOrder', (message) => {
     console.log('from frontend connection', message)
     io.emit("orderConfirmed",{
@@ -285,9 +282,6 @@ io.on('connection', (socket) => {
       data: 123123123
     })
 
-  socket.on('disconnect', () => {
-    console.log('===> Socket Disconnected : ', socket.id)
-  })
 })
 
   // here you can start emitting events to the client
