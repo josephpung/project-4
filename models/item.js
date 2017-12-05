@@ -3,8 +3,8 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcrypt')
 
 const itemSchema = new Schema({
-  name: String, required: true,
-  category: String, required: true,
+  name: { type:String, required: true},
+  category: {type: String, required: true},
   restaurant_id: String,
   price: Number
 

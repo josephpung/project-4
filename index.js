@@ -93,6 +93,7 @@ app.use((req,res,next)=>{
 const Restaurant = require("./models/restaurant")
 const Restotable = require("./models/restotable")
 const User = require("./models/user")
+const Item = require("./models/item")
 
 // allow cors
 var cors = require('cors')
@@ -184,13 +185,18 @@ app.get("/staff", (req,res)=>{
   .then(resto=>{
     Restotable.find(`restaurant_id=${resto.id}`)
     .then(tableorders=>{
-      res.render("owners/main",{
+      res.render("staffs/main",{
         title: "Staff Page",
         resto,
         tableorders
       })
     })
   })
+})
+
+app.get("/:id", (req,res)=>{
+    res.render('staffs/orders')
+
 })
 
 app.get('/', function(req, res) {
@@ -242,18 +248,51 @@ app.post("/addrestaurant", (req,res)=>{
 })
 
 app.post('/addtableorder', (req,res)=>{
-  let newTable = new Restotable({
-    user_id: 1,
-    restaurant_id: 1,
-    transaction_id: 1,
-    table_number: 1,
-    dishes: ["Pizza # 1", "Pasta # 2"],
-    status: ""
-  })
 
-  newTable.save()
+  let returnObj = req.body.restaurantMenu
+  console.log(returnObj)
+  const dishesSave = []
+
+  for (var key in returnObj){
+    var obj = {}
+    obj["name"] = key
+    obj["quantity"] = returnObj[key]
+    dishesSave.push(obj)
+  }
+  console.log(dishesSave)
+  // let newTable = new Restotable({
+  //   user_id: 1,
+  //   restaurant_id: 1,
+  //   transaction_id: 1,
+  //   table_number: 1,
+  //   dishes: dishesSave,
+  //   status: ""
+  // })
+    let newOrder = new User({
+      name: 'yuki',
+      email: 'test@email.com',
+      restaurant_id: "5a1ed7560400ce4dd446f8d5",
+      savedOrder: dishesSave
+    })
+
+  newOrder.save()
   .then(()=>{
     res.send("order is saved")
+    // res.redirect("/")
+  })
+})
+
+app.post('/additem', (req,res)=>{
+  let newItem = new Item({
+    restaurant_id: "5a1ed7560400ce4dd446f8d5",
+    category: "Test",
+    name: "Test Food",
+    price: 9.99
+  })
+
+  newItem.save()
+  .then(()=>{
+    res.send("item is saved")
     // res.redirect("/")
   })
 })
