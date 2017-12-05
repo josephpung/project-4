@@ -67,8 +67,11 @@ app.set('view engine', 'handlebars')
 app.use(express.static(path.join(__dirname, 'public')));
 
 const mongoose = require('mongoose')
+const dbUrl =
+process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost/proj2local'
+const port = process.env.PORT || 8000
 // mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/proj4local')
-mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/proj4local'), {
+mongoose.connect(dbUrl, {
   useMongoClient: true
 })
 mongoose.Promise = global.Promise
@@ -289,6 +292,5 @@ io.on('connection', (socket) => {
 });
 
 
-const port = 8000;
 // io.listen(port);
-server.listen(port)
+app.listen(port)
