@@ -14,15 +14,16 @@ passport.serializeUser(function(user,done){
 
 passport.deserializeUser(function(user,done){
 
-if(user.type === "user"){
+// if(user.type === "user"){
   User.findById(user.id, function(err,user){
     return done(err,user)
   })
-}else{
-  Admin.findById(user.id, function(err,user){
-    return done(err,user)
-  })
-}
+
+// }else{
+//   Admin.findById(user.id, function(err,user){
+//     return done(err,user)
+//   })
+// }
 
 })
 

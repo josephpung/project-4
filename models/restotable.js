@@ -5,9 +5,8 @@ const bcrypt = require('bcrypt')
 const restotableSchema = new Schema({
   user_id: String,
   restaurant_id: String,
-  transaction_id: String,
   table_number: String,
-  dishes: Array,
+  dishes: Object,
   status: String
 
 })

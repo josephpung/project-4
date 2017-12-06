@@ -68,7 +68,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 const mongoose = require('mongoose')
 const dbUrl =
-process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost/proj2local'
+process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost/proj4local'
 const port = process.env.PORT || 8000
 // mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/proj4local')
 mongoose.connect(dbUrl, {
@@ -103,6 +103,7 @@ app.use((req,res,next)=>{
 const Restaurant = require("./models/restaurant")
 const Restotable = require("./models/restotable")
 const User = require("./models/user")
+const Item = require("./models/item")
 
 // allow cors
 var cors = require('cors')
@@ -250,20 +251,53 @@ app.post("/addrestaurant", (req,res)=>{
   })
 })
 
+app.get("/allTables", (req,res)=>{
+  Restotable.find()
+  .then(data=>{
+    res.json(data)
+  })
+})
+
+app.get("/table/:id", (req,res)=>{
+Restotable.findById(req.params.id)
+.then(result=>{
+  res.json(result)
+})
+})
+
+app.get("/menu/:id", (req,res)=>{
+Item.find({restaurant_id: req.params.id})
+.then(result=>{
+  res.json(result)
+})
+})
+
 app.post('/addtableorder', (req,res)=>{
-  let newTable = new Restotable({
-    user_id: 1,
-    restaurant_id: 1,
-    transaction_id: 1,
-    table_number: 1,
-    dishes: ["Pizza # 1", "Pasta # 2"],
-    status: ""
+
+  // var returnArr = []
+  // for (var key in req.body.restaurantMenu){
+  //   var newObj ={}
+  //   newObj["id"]= key
+  //   newObj["quantity"]=req.body.restaurantMenu[key]
+  //   returnArr.push(newObj)
+  // }
+  Restotable.findByIdAndUpdate(req.body.id,{ $set:{dishes: req.body.restaurantMenu}})
+  .then(res=>{
+    console.log(res);
   })
 
-  newTable.save()
-  .then(()=>{
-    res.send("order is saved")
-    // res.redirect("/")
+
+})
+app.post("/additems", (req,res)=>{
+  let newItem = new Item({
+    restaurant_id: "5a16f5af351a2b1ea8904b1f",
+    category: 'drinks',
+    name: 'POTATO SLUSHY',
+    price: 10
+  })
+  newItem.save()
+  .then(result=>{
+    res.send(result);
   })
 })
 

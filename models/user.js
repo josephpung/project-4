@@ -8,7 +8,8 @@ const userSchema = new Schema({
   password: {type: String},
   pic: {type: String},
   type: {type: String, default:"user"},
-  restaurant_id: Array
+  restaurant_id: { type: String, default: "none"},
+  savedOrder: Array
 })
 
 
