@@ -1,0 +1,42 @@
+{
+  "name": "proj4frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.17.1",
+    "qrcode.react": "^0.7.2",
+    "react": "15.x",
+    "react-apollo": "^2.0.1",
+    "react-dom": "15.x",
+    "react-materialize": "^1.1.0",
+    "react-qr-reader": "^2.0.1",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-script": "^2.0.5",
+    "react-scripts": "1.0.17",
+    "react-stripe-elements": "^1.2.1",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "socket.io-client": "^2.0.4",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "react-scripts": "^1.0.17"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": {
+    "/socket.io": {
+      "target": "ws://localhost:8000",
+      "ws": true
+    },
+    "": {
+      "target": "http://localhost:8000"
+    }
+  }
+}

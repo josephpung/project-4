@@ -64,7 +64,7 @@ app.post('/charge', function(req, res) {
 app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 const mongoose = require('mongoose')
 const dbUrl =
@@ -220,7 +220,6 @@ app.get('/', function(req, res) {
 })
 
 });
-
 app.get('/register', function(req, res) {
   res.render('users/register',{
     title: "Register Page"
