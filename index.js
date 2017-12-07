@@ -126,6 +126,7 @@ app.get("/currentUser", (req,res)=>{
 })
 // testing registration
 app.post("/register", (req,res)=>{
+  console.log("Data received from frontend: ",req.body);
   var formData = req.body // if this is modified, change the landingpage fields as well as ppConfig
   if(formData.email === "" || formData.name === "" ){
     res.json({
