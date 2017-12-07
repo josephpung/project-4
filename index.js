@@ -273,18 +273,27 @@ Item.find({restaurant_id: req.params.id})
 })
 
 app.post('/addtableorder', (req,res)=>{
+  var tempObj = {}
+  Restotable.findById(req.body.id)
+  .then(result=>{
+    for (var key in result.dishes){
+      tempObj[key] = result.dishes[key]
+      console.log(key);
+    }
+    for(var key in req.body.restaurantMenu){
+      if(req.body.restaurantMenu[key] === "0"){
+          delete tempObj[key]
+      }else{
+        tempObj[key] = req.body.restaurantMenu[key]
+      }
+    }
+    Restotable.findByIdAndUpdate(req.body.id,{ $set:{dishes: tempObj}})
+    .then(res=>{
+      console.log(res);
+    })
 
-  // var returnArr = []
-  // for (var key in req.body.restaurantMenu){
-  //   var newObj ={}
-  //   newObj["id"]= key
-  //   newObj["quantity"]=req.body.restaurantMenu[key]
-  //   returnArr.push(newObj)
-  // }
-  Restotable.findByIdAndUpdate(req.body.id,{ $set:{dishes: req.body.restaurantMenu}})
-  .then(res=>{
-    console.log(res);
   })
+
 
 
 })
