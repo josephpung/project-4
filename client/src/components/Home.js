@@ -15,6 +15,7 @@ class Home extends Component {
   }
 }
   componentWillMount(){
+    console.log(this.props.user);
     var temp = []
     axios.get('/main')
     .then(response=>{

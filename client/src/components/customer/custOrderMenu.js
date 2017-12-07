@@ -13,6 +13,7 @@ class Menu extends Component {
       errorMessage: "",
       restaurantMenu: [],
       restaurantMenuDisplay: [],
+      tableOrders: {},
       hideMenu: false,
       tableNumber:"",
       currentTab: 0,
@@ -40,9 +41,10 @@ class Menu extends Component {
 
     // setState for restaurantMenu
     this.setState({
-      restaurantMenuDisplay: copiedRestaurantMenu,
+      restaurantMenu: copiedRestaurantMenu,
       submitObj: tempObj
       })
+
     }else if(Number(e.target.value) === 0) {
       const copiedRestaurantMenu = [...this.state.restaurantMenu]
       const selectedMenu = copiedRestaurantMenu.find(menu => menu._id === e.target.id)
@@ -54,9 +56,10 @@ class Menu extends Component {
        tempObj[e.target.name] = "0"
 
       this.setState({
-        restaurantMenuDisplay: copiedRestaurantMenu,
+        restaurantMenu: copiedRestaurantMenu,
         submitObj: tempObj
       })
+      console.log(tempObj);
 
   }
   }
@@ -72,7 +75,9 @@ class Menu extends Component {
     .then(res => console.log(res.data))
 
     socket.emit("submitOrder")
-
+    this.state.restaurantMenu.forEach(dish=>{
+      dish.quantity = 0
+    })
   }
 
   toggle =(e)=>{
@@ -127,10 +132,10 @@ class Menu extends Component {
       })
       axios.get(`/menu/${result.data.restaurant_id}`)
       .then(response =>{
-
+        var x = response.data
         if(!isEmpty(this.state.tableOrders)){
           var menuList = []
-          response.data.forEach(menuItem =>{
+          x.forEach(menuItem =>{
             for (var key in this.state.tableOrders){
               if(key === menuItem.name){
 
@@ -144,14 +149,15 @@ class Menu extends Component {
           var unique = menuList.filter(function(elem, index, self) {
               return index === self.indexOf(elem);
           })
-          console.log("final: ",unique)
           this.setState({
-            restaurantMenu: unique
+            restaurantMenu: unique,
+            restaurantMenuDisplay: response.data
           })
 
         }else{
           this.setState({
-            restaurantMenu: response.data
+            restaurantMenu: response.data,
+            restaurantMenuDisplay: response.data
           })
         }
 
@@ -159,8 +165,7 @@ class Menu extends Component {
     })
   }
   componentDidMount(){
-    const { match: { params } } = this.props
-
+      const { match: { params } } = this.props
     socket.on("orderConfirmed", (data)=>{
       function isEmpty( obj ) {
         for ( var prop in obj ) {
@@ -178,10 +183,10 @@ class Menu extends Component {
         })
         axios.get(`/menu/${result.data.restaurant_id}`)
         .then(response =>{
-
+          var x =response.data
           if(!isEmpty(this.state.tableOrders)){
             var menuList = []
-            response.data.forEach(menuItem =>{
+            x.forEach(menuItem =>{
               for (var key in this.state.tableOrders){
                 if(key === menuItem.name){
 
@@ -197,7 +202,7 @@ class Menu extends Component {
             })
             console.log("final: ",unique)
             this.setState({
-              restaurantMenu: unique
+              restaurantMenuDisplay: unique
             })
 
           }else{
@@ -216,8 +221,7 @@ class Menu extends Component {
     const appetizer = []
     const dessert = []
     const drinks = []
-    console.log("here",this.state.restaurantMenu);
-    this.state.restaurantMenuDisplay.forEach((eachMenu) => {
+    this.state.restaurantMenu.forEach((eachMenu) => {
       if(eachMenu.category === 'mains')
       return mains.push(eachMenu)
       else if(eachMenu.category === 'appetizer')
@@ -240,6 +244,14 @@ class Menu extends Component {
             <option value='0'>0</option>
             <option value='1'>1</option>
             <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
           </Input>
         </td>
       </tr>
@@ -257,6 +269,14 @@ class Menu extends Component {
             <option value='0'>0</option>
             <option value='1'>1</option>
             <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
           </Input>
         </td>
       </tr>
@@ -273,6 +293,14 @@ class Menu extends Component {
             <option value='0'>0</option>
             <option value='1'>1</option>
             <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
           </Input>
         </td>
       </tr>
@@ -288,6 +316,14 @@ class Menu extends Component {
             <option value='0'>0</option>
             <option value='1'>1</option>
             <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
           </Input>
         </td>
       </tr>
@@ -300,7 +336,7 @@ class Menu extends Component {
     if(drinks.length === 0)drinksTab =<tr><td><h3>Coming Soon!</h3></td></tr>
 
 
-    let order = this.state.restaurantMenu.map(dish=>{
+    let order = this.state.restaurantMenuDisplay.map(dish=>{
       if(dish.quantity){
         return (
           <tr key={dish._id}>
@@ -319,10 +355,10 @@ class Menu extends Component {
     if(this.state.hideMenu){
       return (
         <div>
-        <h1 className="center">Open Orders</h1>
+        <h1 className="center">View Ordersz</h1>
 
         <div className="col s5">
-        <h3>Table {this.state.tableNumber}</h3>
+        <h1>Table {this.state.tableNumber}</h1>
 
         <ul className="collection">
           <li className="collection-item ">
@@ -375,7 +411,7 @@ class Menu extends Component {
     return (
       <div>
         {this.state.testText}
-        <h1>Table {this.state.tableNumber}</h1>
+        <h1>Menu</h1>
 
         <h2 className="red-text">{this.state.errorMessage}</h2>
         <form>
