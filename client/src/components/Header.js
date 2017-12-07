@@ -15,7 +15,7 @@ class Header extends Component {
 
     if(this.props.loggedIn){
       return (
-        <Navbar brand='OmniApp' right className="blue">
+        <Navbar brand='OmniApp' right className="orange">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/qrcode">Scan QR Code</NavLink></li>
           <li><NavLink to="/payment">Payment</NavLink></li>
@@ -27,7 +27,7 @@ class Header extends Component {
       )
     }else{
       return (
-        <Navbar brand='OmniApp' right className="blue">
+        <Navbar brand='OmniApp' right className="orange">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/login">Login</NavLink></li>
           <li><NavLink to="/register">Register</NavLink></li>

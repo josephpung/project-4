@@ -25,6 +25,19 @@ export function logout(){
   }
 }
 
+export function reloadUser(){
+  return function (dispatch){
+    axios.get("/currentUser")
+    .then(res=>{
+      dispatch({type: "loginSuccess", payload: res.data.user})
+    })
+
+  }
+
+}
+
+
+
 
 // store.dispatch((dispatch)=>{
 //   dispatch({type: "FETCH_USERS_START"})

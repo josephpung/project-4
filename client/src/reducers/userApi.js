@@ -9,6 +9,7 @@ export const getUser = () => {
   const userJSON = localStorage.getItem('user');
   let user = {  name: "xxx",
     email: "",
+    savedOrder: [],
     loggedIn: false
   };
 
@@ -20,6 +21,7 @@ export const getUser = () => {
 
   return typeof user === 'object' ? user : {  name: "xxx",
     email: "",
+    savedOrder: [],
     loggedIn: false
   };
 }

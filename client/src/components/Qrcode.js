@@ -40,8 +40,7 @@ class Qrcode extends Component {
             {this.state.result}
         </p>
         )
-    }
-)
+    })
       return (
       <div>
         <h1>QR Code Scanner Goes here</h1>

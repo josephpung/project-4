@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { Row, Input, Button } from 'react-materialize'
+// import { Link } from 'react-router-dom'
+import { Row, Input } from 'react-materialize'
 
 import { connect } from 'react-redux'
 import { login } from '../actions/userAction'

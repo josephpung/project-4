@@ -10,11 +10,13 @@ export default function reducer (state = initialState, action) {
         ...state,
         name: action.payload.name,
         email: action.payload.email,
+        savedOrder: action.payload.savedOrder,
+        type: action.payload.type,
         loggedIn: true
       }
     }
     case 'logoutSuccess':{
-    return {...state, name:"", email:"", loggedIn: false}
+    return {...state, name:"", email:"", savedOrder: [], loggedIn: false}
     }
     default :
     return {...state}

@@ -100,7 +100,7 @@ export default class Kitchen extends Component {
       return (
         <Col key={foodOrder.id} s={3} >
           <Card className='orange lighten-5 small' textClassName='black-text' title={`Table ${foodOrder.tableNumber.toString()}`}
-            actions= {[<Button id={foodOrder.tableNumber} onClick={this.handleFoodIsReady} waves='light'>Food Ready</Button>]}>
+            actions= {[<Button key={index} id={foodOrder.tableNumber} onClick={this.handleFoodIsReady} waves='light'>Food Ready</Button>]}>
             {test11[index]}
             <div>
                  <Button id={foodOrder.tableNumber} onClick={this.handleRemoveOrder} waves='light'>Clear Order</Button>
