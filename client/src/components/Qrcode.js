@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
 import { withRouter} from 'react-router-dom'
-import { connect } from 'react-redux'
-import axios from 'axios'
 
 class Qrcode extends Component {
   constructor (props) {
@@ -34,15 +32,8 @@ class Qrcode extends Component {
 
   render () {
     const TextArea = withRouter(({ history }) => {
-      if(this.state.result !== 'No result' && this.props.user.loggedIn) {
+      if(this.state.result !== 'No result') {
         history.push(this.state.result)
-      }else if(this.state.result !== 'No result' && !this.props.user.loggedIn) {
-        axios.get(this.state.result)
-        .then(resto=>{
-          console.log(resto.data);
-           history.push(`/restaurant/${resto.data.restaurant_id}`)
-        })
-        // history.push(this.state.result)
       }
       return(
         <p>
@@ -51,8 +42,8 @@ class Qrcode extends Component {
         )
     })
       return (
-      <div className= "container center" >
-        <h1>Scan QR to Start Ordering!</h1>
+      <div>
+        <h1>QR Code Scanner Goes here</h1>
         <div style={{ width: '300px', margin: 'auto' }}>
           <QrReader
             delay={this.state.delay}
@@ -66,9 +57,5 @@ class Qrcode extends Component {
     )
   }
 }
-const mapStateToProps = (state) =>{
-  return {
-    user: state.users
-  }
-}
-export default connect(mapStateToProps)(Qrcode)
+
+export default Qrcode

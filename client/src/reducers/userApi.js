@@ -10,7 +10,6 @@ export const getUser = () => {
   let user = {  name: "xxx",
     email: "",
     savedOrder: [],
-    type: "user",
     loggedIn: false
   };
 
@@ -23,7 +22,6 @@ export const getUser = () => {
   return typeof user === 'object' ? user : {  name: "xxx",
     email: "",
     savedOrder: [],
-    type: "user",
     loggedIn: false
   };
 }

@@ -22,7 +22,22 @@ class Tables extends Component {
   }
 
   componentDidMount() {
-    socket.on('food ready alert', (data) => {
+    function isEmpty( obj ) {
+      for ( var prop in obj ) {
+        return false;
+      }
+      return true;
+    }
+    socket.on('orderConfirmed', (data)=>{
+      axios.get("/allTables")
+      .then(tableData=>{
+        this.setState({
+          tables: tableData.data
+
+        })
+      })
+    })
+    socket.on('foodCollect', (data) => {
       // converting data into strings so that can render as alert
       const orders = data.map((foodItem) => {
         let tableNumber = Object.keys(foodItem)

@@ -51,7 +51,7 @@ export default class Kitchen extends Component {
     foodThatIsReady[`Table ${tableNum}`] = `${dish.quantity} x ${dish.name}`
     let updatingReadyArr = []
     if (!e.target.className.includes('ready')) {
-      e.target.className = `${this.state.bgColor} ready`
+      e.target.className = this.state.bgColor + ' ' + 'ready'
       updatingReadyArr = [...this.state.foodReady, foodThatIsReady ]
     } else {
        updatingReadyArr = [...this.state.foodReady].filter(item => {
@@ -75,7 +75,7 @@ export default class Kitchen extends Component {
     })
 
     // Fire the ready status to the backend socket receiver
-    socket.emit('food ready', [...filterFromTwoArrays])
+    socket.emit('foodready', [...filterFromTwoArrays])
 
 
     console.log(filterFromTwoArrays, this.state.foodDelivered);

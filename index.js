@@ -291,6 +291,32 @@ app.post("/save_user_order", (req,res)=>{
     })
   })
 })
+app.post('/adduserorder', (req,res)=>{
+  var tempObj = {}
+  Restotable.findById(req.body.id)
+  .then(result=>{
+    for (var key in result.dishes){
+      tempObj[key] = result.dishes[key]
+      console.log(key);
+    }
+    for(var key in req.body.restaurantMenu){
+      if(req.body.restaurantMenu[key] === "0"){
+          delete tempObj[key]
+      }else{
+        var x = Number(tempObj[key]) + Number(req.body.restaurantMenu[key])
+        tempObj[key] = x.toString()
+      }
+    }
+    Restotable.findByIdAndUpdate(req.body.id,{ $set:{dishes: tempObj}})
+    .then(res=>{
+      // console.log(res);
+    })
+
+  })
+
+
+
+})
 app.post('/addtableorder', (req,res)=>{
   var tempObj = {}
   Restotable.findById(req.body.id)
@@ -308,7 +334,7 @@ app.post('/addtableorder', (req,res)=>{
     }
     Restotable.findByIdAndUpdate(req.body.id,{ $set:{dishes: tempObj}})
     .then(res=>{
-      console.log(res);
+      // console.log(res);
     })
 
   })
@@ -368,6 +394,9 @@ io.on('connection', (socket) => {
 
 })
 
+  socket.on("foodready", (data)=>{
+    io.emit("foodCollect", data)
+  })
   // here you can start emitting events to the client
 });
 

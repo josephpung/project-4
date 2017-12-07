@@ -11,6 +11,7 @@ import tableOrders from './staff/tableOrders'
 import Kitchen from './staff/Kitchen'
 import Payment from './stripe/Payment'
 import AdminConsole from './staff/Adminconsole'
+import custOrderMenu from './customer/custOrderMenu'
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -26,6 +27,7 @@ const Main = () => (
       <Route path='/login' component={Login}/>
       <Route path='/qrcode' component={Qrcode}/>
       <Route path='/tables' component={Tables}/>
+      <Route path='/orders/:restoTableId' component={custOrderMenu}/>
       <Route path='/restaurant/:restoId' component={custMenu}/>
       <Route path='/table/:restoTableId' component={tableOrders}/>
       <Route path='/kitchen' component={Kitchen}/>
