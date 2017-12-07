@@ -30,13 +30,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": {
-    "/socket.io": {
-      "target": "ws://localhost:8000",
-      "ws": true
-    },
-    "": {
-      "target": "http://localhost:8000"
-    }
-  }
+  "proxy": "http://localhost:8000"
 }

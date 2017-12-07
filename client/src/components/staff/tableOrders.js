@@ -3,11 +3,8 @@ import { Tabs, Tab, Table, Input, Button} from 'react-materialize'
 import { connect } from 'react-redux'
 import { reloadUser } from '../../actions/userAction'
 import axios from 'axios'
-import io from 'socket.io-client';
 import { Link } from 'react-router-dom'
-
-const socket = io('/');
-
+import socket from '../../API/socketAPI'
 
 
 class Orders extends Component {
@@ -17,12 +14,20 @@ class Orders extends Component {
       tableId: "",
       tableNumber: "",
       restaurantMenu: [],
+      userRestaurantMenu: [],
+      userDisplayMenu: true,
       tableOrders: {},
       currentDishArr: [],
       restoId: "",
       currentTab: 0,
       category: ['Appetizers', 'Mains', 'Dessert', 'Drinks' ],
       tab: {
+        Appetizers: true,
+        Mains: false,
+        Dessert: false,
+        Drinks: false
+      },
+      userTab: {
         Appetizers: true,
         Mains: false,
         Dessert: false,
@@ -39,18 +44,34 @@ class Orders extends Component {
   handleSubmit = (e) => {
         e.preventDefault()
 
-        console.log(this.state.submitObj)
         axios.post("/addtableorder", {
           id: this.state.tableId,
           restaurantMenu: this.state.submitObj
         })
         .then(res => console.log(res.data))
-
+        socket.emit("submitOrder")
   }
 
+  userTabChange=(e)=>{
+    const copiedRestaurantMenu = [...this.state.userRestaurantMenu]
+    if (Number(e.target.value) > 0) {
+    const selectedMenu = copiedRestaurantMenu.find(menu => menu._id === e.target.id)
+    // update quantity to the object
+    selectedMenu.quantity = e.target.value
+
+    let tempObj = {...this.state.submitObj}
+      tempObj[e.target.name] = e.target.value
+    // setState for restaurantMenu
+    this.setState({
+      userRestaurantMenu: copiedRestaurantMenu,
+      submitObj: tempObj
+      })
+
+    }
+  }
   handleOnChange = (e) => {
     const copiedRestaurantMenu = [...this.state.restaurantMenu]
-    if (e.target.value > 0) {
+    if (Number(e.target.value) > 0) {
     const selectedMenu = copiedRestaurantMenu.find(menu => menu._id === e.target.id)
     // update quantity to the object
     selectedMenu.quantity = e.target.value
@@ -81,7 +102,17 @@ class Orders extends Component {
   }
   }
 
-  // should be placeed into Tab component like onClick
+  // should be placed into Tab component like onClick
+  userHandleTab = (tabIndex) => {
+    const tempObj = {}
+    this.state.category.forEach((category, index) => {
+      tempObj[category] = Number(tabIndex.slice(-1)) === index ? true : false
+    })
+
+    this.setState({
+      userTab: tempObj
+    })
+  }
   handleTab = (tabIndex) => {
     const tempObj = {}
     this.state.category.forEach((category, index) => {
@@ -93,6 +124,11 @@ class Orders extends Component {
     })
   }
 
+  toggleShowMenu(){
+    this.setState({
+      userDisplayMenu: !this.state.userDisplayMenu
+    })
+  }
   componentWillMount(){
     function isEmpty( obj ) {
       for ( var prop in obj ) {
@@ -101,12 +137,6 @@ class Orders extends Component {
       return true;
     }
     const { match: { params } } = this.props
-
-    this.setState({
-      localSavedOrder: this.props.user.savedOrder,
-      tableId: params.restoTableId
-    })
-
     axios.get(`/table/${params.restoTableId}`)
     .then(result=>{
 
@@ -114,7 +144,21 @@ class Orders extends Component {
         tableOrders: result.data.dishes,
         tableNumber: result.data.table_number
       })
+      axios.get(`/menu/${result.data.restaurant_id}`)
+      .then(response =>{
+        // console.log("wtf", response.data);
+          this.setState({
+            userRestaurantMenu: response.data
+          })
+        })
+      })
+    axios.get(`/table/${params.restoTableId}`)
+    .then(result=>{
 
+      this.setState({
+        tableOrders: result.data.dishes,
+        tableNumber: result.data.table_number
+      })
       axios.get(`/menu/${result.data.restaurant_id}`)
       .then(response =>{
 
@@ -123,6 +167,7 @@ class Orders extends Component {
           response.data.forEach(menuItem =>{
             for (var key in this.state.tableOrders){
               if(key === menuItem.name){
+
                 menuItem["quantity"] = this.state.tableOrders[menuItem.name]
                 menuList.push(menuItem)
               }else{
@@ -130,26 +175,64 @@ class Orders extends Component {
               }
             }
           })
-          this.setState({
-            restaurantMenu: menuList
+          var unique = menuList.filter(function(elem, index, self) {
+              return index === self.indexOf(elem);
           })
-          console.log(menuList);
-
+          this.setState({
+            restaurantMenu: unique
+          })
         }else{
           this.setState({
             restaurantMenu: response.data
           })
         }
-
       })
     })
-
   }
   componentDidMount(){
-
+    function isEmpty( obj ) {
+      for ( var prop in obj ) {
+        return false;
+      }
+      return true;
+    }
+    const { match: { params } } = this.props
     socket.on("orderConfirmed", (data)=>{
-      this.setState({
-        testText: data.message
+      axios.get(`/table/${params.restoTableId}`)
+      .then(result=>{
+
+        this.setState({
+          tableOrders: result.data.dishes,
+          tableNumber: result.data.table_number
+        })
+        axios.get(`/menu/${result.data.restaurant_id}`)
+        .then(response =>{
+
+          if(!isEmpty(this.state.tableOrders)){
+            var menuList = []
+            response.data.forEach(menuItem =>{
+              for (var key in this.state.tableOrders){
+                if(key === menuItem.name){
+
+                  menuItem["quantity"] = this.state.tableOrders[menuItem.name]
+                  menuList.push(menuItem)
+                }else{
+                  menuList.push(menuItem)
+                }
+              }
+            })
+            var unique = menuList.filter(function(elem, index, self) {
+                return index === self.indexOf(elem);
+            })
+            this.setState({
+              restaurantMenu: unique
+            })
+          }else{
+            this.setState({
+              restaurantMenu: response.data
+            })
+          }
+        })
       })
     })
   }
@@ -176,7 +259,7 @@ class Orders extends Component {
       return(
       <tr key={item._id}>
         <td>{item.name}</td>
-        <td>{item.price}</td>
+        <td>${item.price}</td>
         <td>
           <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.handleOnChange}>
             <option value='0'>0</option>
@@ -200,7 +283,7 @@ class Orders extends Component {
       return(
       <tr key={item._id}>
         <td>{item.name}</td>
-        <td>{item.price}</td>
+        <td>${item.price}</td>
         <td>
           {/* onChange */}
           <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.handleOnChange}>
@@ -225,7 +308,7 @@ class Orders extends Component {
       return(
       <tr key={item._id}>
         <td>{item.name}</td>
-        <td>{item.price}</td>
+        <td>${item.price}</td>
         <td>
           {/* onChange */}
           <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.handleOnChange}>
@@ -250,7 +333,7 @@ class Orders extends Component {
       return(
       <tr key={item._id}>
         <td>{item.name}</td>
-        <td>{item.price}</td>
+        <td>${item.price}</td>
         <td>
           <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.handleOnChange}>
             <option value='0'>0</option>
@@ -271,10 +354,129 @@ class Orders extends Component {
       )
     })
 
-    if(appetizer.length === 0)appetizerTab = <tr><td><h3>Coming Soon!</h3></td></tr>
-    if(mains.length === 0)mainsTab = <tr><td><h3>Coming Soon!</h3></td></tr>
-    if(dessert.length === 0)dessertTab =<tr><td><h3>Coming Soon!</h3></td></tr>
-    if(drinks.length === 0)drinksTab =<tr><td><h3>Coming Soon!</h3></td></tr>
+    //user menu data loading
+    const userAppetizer = []
+    const userMains = []
+    const userDessert = []
+    const userDrinks = []
+
+    this.state.userRestaurantMenu.forEach((eachMenu) => {
+      if(eachMenu.category === 'mains')
+      return userMains.push(eachMenu)
+      else if(eachMenu.category === 'appetizer')
+      return userAppetizer.push(eachMenu)
+      else if(eachMenu.category === 'dessert')
+      return userDessert.push(eachMenu)
+      else if(eachMenu.category === 'drinks')
+      return userDrinks.push(eachMenu)
+      else
+      return Error('Error')
+    })
+
+    let userAppetizerTab = userAppetizer.map((item, index) => {
+      return(
+      <tr key={item._id}>
+        <td>{item.name}</td>
+        <td>${item.price}</td>
+        <td>
+          <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.userTabChange}>
+            <option value='0'>0</option>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
+          </Input>
+        </td>
+      </tr>
+      )
+    })
+
+    let userMainsTab = userMains.map((item) => {
+      return(
+      <tr key={item._id}>
+        <td>{item.name}</td>
+        <td>${item.price}</td>
+        <td>
+          {/* onChange */}
+          <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.userTabChange}>
+            <option value='0'>0</option>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
+          </Input>
+        </td>
+      </tr>
+      )
+    })
+
+    let userDessertTab = userDessert.map((item) => {
+      return(
+      <tr key={item._id}>
+        <td>{item.name}</td>
+        <td>${item.price}</td>
+        <td>
+          {/* onChange */}
+          <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.userTabChange}>
+            <option value='0'>0</option>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
+          </Input>
+        </td>
+      </tr>
+      )
+    })
+
+    let userDrinksTab = userDrinks.map((item) => {
+      return(
+      <tr key={item._id}>
+        <td>{item.name}</td>
+        <td>${item.price}</td>
+        <td>
+          <Input s={5} id={item._id} name={item.name} type='select' label='Quantity' defaultValue={item.quantity} onChange={this.userTabChange}>
+            <option value='0'>0</option>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='6'>6</option>
+            <option value='7'>7</option>
+            <option value='8'>8</option>
+            <option value='9'>9</option>
+            <option value='10'>10</option>
+
+          </Input>
+        </td>
+      </tr>
+      )
+    })
+
+
+    if(userAppetizer.length === 0)userAppetizerTab = <tr><td><h3>Coming Soon!</h3></td></tr>
+    if(userMains.length === 0)userMainsTab = <tr><td><h3>Coming Soon!</h3></td></tr>
+    if(userDessert.length === 0)userDessertTab =<tr><td><h3>Coming Soon!</h3></td></tr>
+    if(userDrinks.length === 0)userDrinksTab =<tr><td><h3>Coming Soon!</h3></td></tr>
 
 
     let order = this.state.restaurantMenu.map(dish=>{
@@ -290,34 +492,35 @@ class Orders extends Component {
 
     })
 
-    if (this.props.user.type ==="user"){
+    let totalPrice = this.state.restaurantMenu.length >0 ? this.state.restaurantMenu.map(dish=>{
+        return  dish.quantity!== undefined ? dish.price*dish.quantity : 0 }).reduce((a,b)=>{ return a+b}) : 0
+
+   if (this.props.user.type ==="user" && this.props.user.loggedIn && !this.state.userDisplayMenu){
       return (
         <div>
         <h1 className="center">View Ordersz</h1>
-        <h5>Table Number: </h5>
 
-        <Table>
-        	<thead>
-        		<tr>
-        			<th data-field="id">Dish Name</th>
-        			<th data-field="name">Quantity</th>
-        			<th data-field="price">Total Price</th>
-        		</tr>
-        	</thead>
+        <div className="col s5">
+        <h1>Table {this.state.tableNumber}</h1>
 
-        	<tbody>
-        		<tr>
-        			<td>Alvin</td>
-        			<td>Eclair</td>
-        			<td>$0.87</td>
-        		</tr>
-        		<tr>
-        			<td>Alan</td>
-        			<td>Jellybean</td>
-        			<td>$3.76</td>
-        		</tr>
-        	</tbody>
-        </Table>
+        <ul className="collection">
+          <li className="collection-item ">
+            <Table>
+              <thead>
+                <tr>
+                  <th>Dish</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order}
+              </tbody>
+            </Table>
+          </li>
+        </ul>
+
+        </div>
         <Table>
         	<thead>
             <tr>
@@ -328,23 +531,110 @@ class Orders extends Component {
         		<tr>
               <td></td>
               <td className="right-align"><label>Subtotal:</label></td>
-        			<td>$22.90</td>
+        			<td>${totalPrice}</td>
         		</tr>
             <tr>
               <td></td>
               <td className="right-align"><label>GST & Service Charge</label></td>
-        			<td>$2.90</td>
+        			<td>${(totalPrice*.1).toFixed(2)}</td>
         		</tr>
             <tr>
               <td></td>
               <td className="right-align"><label>Total</label></td>
-        			<td>$25.90</td>
+        			<td>${(totalPrice*1.1).toFixed(2)}</td>
         		</tr>
         	</tbody>
         </Table>
-        <Link to={"/custmenu"} className="btn black">back to Menu</Link>
+        <button className="btn" onClick={()=>{ this.toggleShowMenu()}}>View Menu</button>
         <Link to={"/menu"} className="btn right black">Pay Bill beetch</Link>
 
+        </div>
+      )
+    }else if(this.props.user.type ==="user" && this.props.user.loggedIn && this.state.userDisplayMenu) {
+      return(
+        <div className="row">
+          <div className="col s7">
+              <h1>User Order Here</h1>
+
+            <form>
+
+              <Tabs className='tab-demo z-depth-1' onChange={ this.userHandleTab }>
+
+                <Tab title='Appetizers' active={this.state.userTab.Appetizers}>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th data-field='id'>Food Item</th>
+                        <th data-field='name'>Price</th>
+                        <th data-field='price'>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {userAppetizerTab}
+                    </tbody>
+                  </Table>
+                </Tab>
+
+                <Tab title='Mains' active={this.state.userTab.Mains}>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th data-field='id'>Food Item</th>
+                        <th data-field='name'>Price</th>
+                        <th data-field='price'>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {userMainsTab}
+                    </tbody>
+                  </Table>
+                </Tab>
+
+                <Tab title='Dessert' active={this.state.userTab.Dessert}>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th data-field='id'>Food Item</th>
+                        <th data-field='name'>Price</th>
+                        <th data-field='price'>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {userDessertTab}
+                    </tbody>
+                  </Table>
+                </Tab>
+
+                <Tab title='Drinks' active={this.state.userTab.Drinks}>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th data-field='id'>Food Item</th>
+                        <th data-field='name'>Price</th>
+                        <th data-field='price'>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {userDrinksTab}
+                    </tbody>
+                  </Table>
+                </Tab>
+
+              </Tabs>
+
+                <div className="row">
+
+                  <div className="col s5">
+                    <Button onClick={e => this.handleSubmit(e)} waves='light'>Confirm Order</Button>
+                  </div>
+
+                </div>
+
+              </form>
+              <Button onClick={e => this.reload(e)} waves='light'>Refresh User</Button>
+
+          </div>
+        <button className="btn" onClick={()=>{ this.toggleShowMenu()}}>View Bill</button>
         </div>
       )
     }else{
@@ -460,7 +750,6 @@ class Orders extends Component {
 }
 
 const mapStateToProps = (state) =>{
-  console.log(state.users);
   return {
     user: state.users
   }

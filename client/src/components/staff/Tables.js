@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col, CardPanel } from 'react-materialize'
 import axios from 'axios'
+import socket from '../../API/socketAPI'
 
 class Tables extends Component {
   constructor (props) {
@@ -18,8 +19,22 @@ class Tables extends Component {
 
       })
     })
-
   }
+
+  componentDidMount() {
+    socket.on('food ready alert', (data) => {
+      // converting data into strings so that can render as alert
+      const orders = data.map((foodItem) => {
+        let tableNumber = Object.keys(foodItem)
+        tableNumber = tableNumber[0].concat(' - ')
+        let foodToCollect = Object.values(foodItem)
+        let combineString = tableNumber.concat(foodToCollect[0])
+        return combineString
+      })
+      alert(`Collect: ${orders}`)
+    })
+  }
+
   render () {
 
     function isEmpty( obj ) {

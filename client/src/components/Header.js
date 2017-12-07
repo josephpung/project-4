@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 
-import { Navbar } from 'react-materialize';
+import { Navbar,NavItem, Dropdown } from 'react-materialize';
 
 import { connect } from 'react-redux'
 import { logout } from '../actions/userAction'
@@ -29,6 +29,12 @@ class Header extends Component {
     }else{
       return (
         <Navbar brand='OmniApp' right className="orange">
+          <Dropdown trigger={<NavItem>More</NavItem>} options={{belowOrigin: true,hover: true}}>
+        	<NavLink className= "black-text" to="/login">Login</NavLink>
+        	<NavLink className= "black-text" to="/login">Login</NavLink>
+        	<NavItem className= "black" divider />
+        	<NavLink  className= "black-text"to="/login">Login</NavLink>
+          </Dropdown>
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/login">Login</NavLink></li>
           <li><NavLink to="/register">Register</NavLink></li>

@@ -5,8 +5,7 @@ import Register from './Register'
 import Login from './Login'
 import Qrcode from './Qrcode'
 
-import custMenu from './staff/custMenu'
-import customerTableOrder from './customer/tableOrdersCust'
+import custMenu from './customer/custMenu'
 import Tables from './staff/Tables'
 import tableOrders from './staff/tableOrders'
 import Kitchen from './staff/Kitchen'
@@ -27,9 +26,8 @@ const Main = () => (
       <Route path='/login' component={Login}/>
       <Route path='/qrcode' component={Qrcode}/>
       <Route path='/tables' component={Tables}/>
-      <Route path='/custmenu' component={custMenu}/>
+      <Route path='/restaurant/:restoId' component={custMenu}/>
       <Route path='/table/:restoTableId' component={tableOrders}/>
-      <Route path='/customer_table_order' component={customerTableOrder}/>
       <Route path='/kitchen' component={Kitchen}/>
       <Route path='/payment' component={Payment}/>
       <Route path='/admin_console' component={AdminConsole}/>

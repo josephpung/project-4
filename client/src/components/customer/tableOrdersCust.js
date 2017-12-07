@@ -31,7 +31,7 @@ class Order extends Component {
 
       return (
         <div>
-        <h1 className="center">View Ordersz</h1>
+        <h1 className="center">View Restaurant Menu and Save for future</h1>
         <h5>Table Number: </h5>
 
         <Table>

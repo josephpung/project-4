@@ -8,6 +8,7 @@ export default function reducer (state = initialState, action) {
       // console.log("payload received ><><",action.payload);
       return {
         ...state,
+        id: action.payload._id,
         name: action.payload.name,
         email: action.payload.email,
         savedOrder: action.payload.savedOrder,
@@ -16,7 +17,7 @@ export default function reducer (state = initialState, action) {
       }
     }
     case 'logoutSuccess':{
-    return {...state, name:"", email:"", savedOrder: [], loggedIn: false}
+    return {...state,id:"", name:"", email:"", savedOrder: [], type:"user", loggedIn: false}
     }
     default :
     return {...state}
