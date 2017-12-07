@@ -17,7 +17,7 @@ export default function reducer (state = initialState, action) {
       }
     }
     case 'logoutSuccess':{
-    return {...state,id:"", name:"", email:"", savedOrder: [], loggedIn: false}
+    return {...state,id:"", name:"", email:"", savedOrder: [], type:"user", loggedIn: false}
     }
     default :
     return {...state}

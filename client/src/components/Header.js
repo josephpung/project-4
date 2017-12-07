@@ -15,16 +15,15 @@ class Header extends Component {
 
     if(this.props.user.loggedIn && this.props.user.type === "user"){
       return (
-        <Navbar brand='OmniApp' right className="orange">
+        <Navbar brand='OmniApp' right className="black center">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/qrcode">Scan QR Code</NavLink></li>
-          <li><NavLink to="/custmenu">View Menu</NavLink></li>
           <li><NavLink to="/" onClick={(e)=>{this.handleClick(e)}}>logout</NavLink></li>
           </Navbar>
       )
     }else if(this.props.user.loggedIn && this.props.user.type === "staff"){
       return (
-        <Navbar brand='OmniApp' right className="orange">
+        <Navbar brand='OmniApp' right className="black center">
           <li><NavLink to="/tables">View Tables</NavLink></li>
           <li><NavLink to="/kitchen">View Kitchen</NavLink></li>
           <li><NavLink to="/admin_console">Admin</NavLink></li>
@@ -33,7 +32,7 @@ class Header extends Component {
       )
     }else{
       return (
-        <Navbar brand='OmniApp' right className="orange">
+        <Navbar brand='OmniApp' right className="black center">
           {/* <Dropdown trigger={<NavItem>More</NavItem>} options={{belowOrigin: true,hover: true}}>
         	<NavLink className= "black-text" to="/login">Login</NavLink>
         	<NavLink className= "black-text" to="/login">Login</NavLink>

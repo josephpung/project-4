@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-
+import { Icon} from 'react-materialize'
 import axios from 'axios'
 
 
@@ -35,13 +35,13 @@ class Home extends Component {
           return (
 
             <div className="col s12 m4" key={post._id}>
-              <div className="card blue-grey darken-1">
+              <div className="card black">
                 <div className="card-content white-text">
                   <Link to={"/restaurant/"+post._id}>
                   <span className="card-title">{ post.name }</span>
                   </Link>
-                  <p>{ post.cuisine }</p>
-                  <p>{ post.address }</p>
+                  <p><Icon tiny>info_outline</Icon> { post.cuisine }</p>
+                  <p><Icon tiny>nature_people</Icon> { post.address }</p>
                 </div>
               </div>
             </div>
@@ -49,11 +49,11 @@ class Home extends Component {
           )
         })
         return (
-          <div>
-            <h1>Welcome to OmniApp!!</h1>
-            <div className="container">
+          <div className="container">
+            <h1 className="center">Welcome to OmniApp!!</h1>
+            <div>
               <div className="row">
-                <h2>Restaurant List</h2>
+                <h2 className="center">Restaurant List</h2>
                 {
                   allRestaurants
                 }

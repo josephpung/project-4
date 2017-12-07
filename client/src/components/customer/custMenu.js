@@ -196,8 +196,8 @@ class Menu extends Component {
 
     return (
       <div>
-        {this.state.testText}
-        <h1>Kindly Select Dishes to Pre Save</h1>
+        <h1 className="center">Kindly Select Dishes</h1>
+        <p className="center">Saved dishes cannot be modified, please take note</p>
 
         <h2 className="red-text">{this.state.errorMessage}</h2>
         <form>

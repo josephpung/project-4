@@ -37,13 +37,13 @@ class Qrcode extends Component {
       }
       return(
         <p>
-            {this.state.result}
+          
         </p>
         )
     })
       return (
       <div>
-        <h1>QR Code Scanner Goes here</h1>
+        <h1 className="center">Please scan the QR code provided</h1>
         <div style={{ width: '300px', margin: 'auto' }}>
           <QrReader
             delay={this.state.delay}

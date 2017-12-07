@@ -75,9 +75,6 @@ class Menu extends Component {
     .then(res => console.log(res.data))
 
     socket.emit("submitOrder")
-    this.state.restaurantMenu.forEach(dish=>{
-      dish.quantity = 0
-    })
   }
 
   toggle =(e)=>{
@@ -355,10 +352,10 @@ class Menu extends Component {
     if(this.state.hideMenu){
       return (
         <div>
-        <h1 className="center">View Ordersz</h1>
+        <h1 className="center">Orders</h1>
 
         <div className="col s5">
-        <h1>Table {this.state.tableNumber}</h1>
+        <h4 className="center">Table {this.state.tableNumber}</h4>
 
         <ul className="collection">
           <li className="collection-item ">
@@ -403,14 +400,13 @@ class Menu extends Component {
         	</tbody>
         </Table>
         <Button onClick={e => this.toggle(e)}>Menu</Button>
-        <Link to={"/menu"} className="btn right black">Pay Bill beetch</Link>
+        <Link to={""} className="btn right black">Pay Bill</Link>
 
         </div>
       )
     }else{
     return (
       <div>
-        {this.state.testText}
         <h1>Menu</h1>
 
         <h2 className="red-text">{this.state.errorMessage}</h2>
@@ -477,8 +473,9 @@ class Menu extends Component {
           <div className="row red-text">
             Please note that this order is only sent to the kitchen upon confirmation at the restaurant
           </div>
-          <Button onClick={e => this.handleSubmit(e)} waves='light'>Confirm Order</Button>
-          <Button onClick={e => this.toggle(e)}>View Bill</Button>
+          <Button className="black" onClick={e => this.handleSubmit(e)} waves='light'>Confirm Order</Button>
+
+          <Button className="black right" onClick={e => this.toggle(e)}>View Bill</Button>
 
         </form>
 
