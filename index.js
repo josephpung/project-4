@@ -277,6 +277,7 @@ Restotable.findById(req.params.id)
 app.get("/menu/:id", (req,res)=>{
 Item.find({restaurant_id: req.params.id})
 .then(result=>{
+  console.log(result);
   res.json(result)
 })
 })
@@ -337,6 +338,22 @@ app.get('/payment', function(req, res) {
 
  })
 });
+
+app.get("/checktablesforuser", (req,res)=>{
+  if(req.user === undefined){
+    res.json({
+      message: "No user logged in",
+      status: false
+    })
+  }else{
+    console.log(req.user._id);
+    Restotable.find({user_id: req.user._id})
+    .then(table=>{
+      res.json(table)
+    })
+
+  }
+})
 
 // sockets setup
 
