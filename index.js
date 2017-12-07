@@ -303,8 +303,12 @@ app.post('/adduserorder', (req,res)=>{
       if(req.body.restaurantMenu[key] === "0"){
           delete tempObj[key]
       }else{
-        var x = Number(tempObj[key]) + Number(req.body.restaurantMenu[key])
-        tempObj[key] = x.toString()
+        if(tempObj[key]){
+          tempObj[key] = (Number(tempObj[key]) + Number(req.body.restaurantMenu[key])).toString()
+        }else{
+          tempObj[key] = req.body.restaurantMenu[key]
+        }
+
       }
     }
     Restotable.findByIdAndUpdate(req.body.id,{ $set:{dishes: tempObj}})
