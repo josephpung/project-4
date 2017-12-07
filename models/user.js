@@ -21,7 +21,7 @@ userSchema.pre("save", function(next){
   if (!user.isModified('password')) return next();
 
   //hash the password
-  bcrypt.hash(user.password, 11)
+  bcrypt.hash(user.password, 10)
   .then(hash =>{
     console.log(`[HASHING PASSWORD] : - the hash is ${hash}, password is ${user.password}`)
     user.password = hash
