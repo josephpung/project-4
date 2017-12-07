@@ -17,8 +17,12 @@ class Register extends Component {
      })
   }
 
-  submitDetails(){
+  submitDetails=(e)=>{
+    e.preventDefault()
     axios.post('/register',this.state.submitObj)
+    .then(res=>{
+      console.log(res);
+    })
   }
   render () {
     return (
@@ -31,7 +35,7 @@ class Register extends Component {
         		<Input type="password" name='cfmPassword' label="Confirm Password" s={8} onChange={(e) => this.handleChange(e)} />
         </Row>
         <Row>
-            <Button waves='light' onClick={this.submitDetails()}>Submit</Button>
+            <Button waves='light' onClick={(e)=>{this.submitDetails(e)}}>Submit</Button>
         </Row>
       </div>
     )

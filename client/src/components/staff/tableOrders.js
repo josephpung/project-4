@@ -290,11 +290,6 @@ class Orders extends Component {
 
     })
 
-    // let displayOrderList = this.state.tableOrders.map(order=>{
-    //   return (
-    //     <div key={order.id}>{order.id}</div>
-    //   )
-    // })
     if (this.props.user.type ==="user"){
       return (
         <div>
@@ -347,7 +342,7 @@ class Orders extends Component {
         		</tr>
         	</tbody>
         </Table>
-        <Link to={"/menu"} className="btn black">back to Menu</Link>
+        <Link to={"/custmenu"} className="btn black">back to Menu</Link>
         <Link to={"/menu"} className="btn right black">Pay Bill beetch</Link>
 
         </div>
