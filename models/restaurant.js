@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const restaurantSchema = new Schema({
   name: {type:String, required: true},
   cuisine: {type: String, required: true},
-  tableQuantity: Number,
+  tables: Number,
   address: String,
   contact: String
 

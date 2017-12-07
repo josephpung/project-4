@@ -22,6 +22,7 @@ class Header extends Component {
           <li><NavLink to="/tables">View Tables</NavLink></li>
           <li><NavLink to="/kitchen">View Kitchen</NavLink></li>
           <li><NavLink to="/menu">View Menu</NavLink></li>
+          <li><NavLink to="/admin_console">Admin</NavLink></li>
           <li><NavLink to="/" onClick={(e)=>{this.handleClick(e)}}>logout</NavLink></li>
           </Navbar>
       )
@@ -36,6 +37,8 @@ class Header extends Component {
           <li><NavLink to="/tables">View Tables</NavLink></li>
           <li><NavLink to="/kitchen">View Kitchen</NavLink></li>
           <li><NavLink to="/menu">View Menu</NavLink></li>
+          <li><NavLink to="/admin_console">Admin</NavLink></li>
+
 
           </Navbar>
       )

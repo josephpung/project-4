@@ -7,7 +7,7 @@ const restotableSchema = new Schema({
   restaurant_id: String,
   table_number: String,
   dishes: Object,
-  status: String
+  status: {type: String, default: "Preparing"}
 
 })
 

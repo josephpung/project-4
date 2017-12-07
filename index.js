@@ -246,8 +246,26 @@ app.post("/addrestaurant", (req,res)=>{
   })
 
   newRes.save()
-  .then(()=>{
-    res.redirect("/")
+  .then((result)=>{
+    res.json({
+      message: "Restaurant Added"
+    })
+    for (var x=1; x<= req.body.tableNo; x++){
+        var tableNumber = x.toString() + "A"
+      let newRestoTable = new Restotable({
+        user_id: "nil",
+        restaurant_id: result._id,
+        transaction_id: "n.a",
+        table_number: tableNumber,
+        status: "In Progress",
+        dishes: []
+      })
+
+      newRestoTable.save()
+      .then(table=>{
+        console.log("New Table Added \n");
+      })
+    }
   })
 })
 
@@ -299,14 +317,17 @@ app.post('/addtableorder', (req,res)=>{
 })
 app.post("/additems", (req,res)=>{
   let newItem = new Item({
-    restaurant_id: "5a16f5af351a2b1ea8904b1f",
-    category: 'drinks',
-    name: 'POTATO SLUSHY',
-    price: 10
+    restaurant_id: req.body.restoId,
+    category: req.body.category,
+    name: req.body.name,
+    price: req.body.price
   })
   newItem.save()
   .then(result=>{
-    res.send(result);
+    res.json({
+      message: "Item added",
+      itemDetails: result
+    })
   })
 })
 

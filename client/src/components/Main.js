@@ -11,6 +11,7 @@ import Tables from './staff/Tables'
 import tableOrders from './staff/tableOrders'
 import Kitchen from './staff/Kitchen'
 import Payment from './stripe/Payment'
+import AdminConsole from './staff/Adminconsole'
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -31,6 +32,7 @@ const Main = () => (
       <Route path='/customer_table_order' component={customerTableOrder}/>
       <Route path='/kitchen' component={Kitchen}/>
       <Route path='/payment' component={Payment}/>
+      <Route path='/admin_console' component={AdminConsole}/>
     </Switch>
   </main>
 )
