@@ -205,20 +205,10 @@ app.get("/staff", (req,res)=>{
   })
 })
 
-app.get('/', function(req, res) {
-  Restaurant.find()
+app.get('/main', function(req, res) {
+  Restaurant.find({})
   .then(resto=>{
-
-    Restotable.find("restaurant_id=1")
-    .then(table=>{
-
-    res.render('defaultviews/home',{
-      title: "Home Page",
-      resto,
-      table
-
-   })
- })
+    res.json({resto})
 })
 
 });
@@ -290,7 +280,16 @@ Item.find({restaurant_id: req.params.id})
   res.json(result)
 })
 })
+app.post("/save_user_order", (req,res)=>{
 
+  User.findByIdAndUpdate(req.body.userId,{savedOrder: req.body.orders})
+  .then(result=>{
+    res.json({
+      message: "Order Saved",
+      details: result
+    })
+  })
+})
 app.post('/addtableorder', (req,res)=>{
   var tempObj = {}
   Restotable.findById(req.body.id)
