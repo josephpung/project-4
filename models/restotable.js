@@ -8,7 +8,9 @@ const restotableSchema = new Schema({
   transaction_id: String,
   table_number: String,
   dishes: Object,
-  status: {type: String, default: "Preparing"}
+  foodStatus: {type: String, default: "Preparing"},
+  drinksStatus: {type: String, default: "Preparing"}
+
 
 })
 

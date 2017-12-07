@@ -257,7 +257,7 @@ app.post("/addrestaurant", (req,res)=>{
         restaurant_id: result._id,
         transaction_id: "n.a",
         table_number: tableNumber,
-        status: "In Progress",
+        foodStatus: "Preparing",
         dishes: []
       })
 
