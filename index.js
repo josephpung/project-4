@@ -268,6 +268,7 @@ app.get("/allTables", (req,res)=>{
 })
 
 app.get("/table/:id", (req,res)=>{
+  console.log("Finding table \n");
 Restotable.findById(req.params.id)
 .then(result=>{
   res.json(result)

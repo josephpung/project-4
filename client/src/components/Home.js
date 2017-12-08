@@ -40,8 +40,8 @@ class Home extends Component {
                   <Link to={"/restaurant/"+post._id}>
                   <span className="card-title">{ post.name }</span>
                   </Link>
-                  <p><Icon tiny>info_outline</Icon> { post.cuisine }</p>
-                  <p><Icon tiny>nature_people</Icon> { post.address }</p>
+                  <p>{ post.cuisine }</p>
+                  <p>{ post.address }</p>
                 </div>
               </div>
             </div>

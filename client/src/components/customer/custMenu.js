@@ -264,7 +264,7 @@ class Menu extends Component {
             Please note that this order is only sent to the kitchen upon confirmation at the restaurant
           </div>
           <Button onClick={e => this.handleSubmit(e)} waves='light'>Save Order</Button>
-          <Link to={"/customer_table_order"} className="btn right">View Bill</Link>
+          {/* <Link to={"/customer_table_order"} className="btn right">View Bill</Link> */}
 
         </form>
 
