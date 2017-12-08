@@ -2,7 +2,7 @@
   <img src="/public/assets/images/logo.png">
 </p>
 
-[Live Link (To be added asap)](www.potato.com)
+http://proj4server.herokuapp.com/
 ### Description
 The service industry has not had the best in terms of technological advancements, an app to solve each problem, from queues to reservations to the traditional POS system.
 
