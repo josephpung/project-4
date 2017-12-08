@@ -2,7 +2,7 @@
   <img src="/public/assets/images/logo.png">
 </p>
 
-[Live Link (To be added asap)](www.potato.com)
+http://proj4server.herokuapp.com/
 ### Description
 The service industry has not had the best in terms of technological advancements, an app to solve each problem, from queues to reservations to the traditional POS system.
 
@@ -13,14 +13,18 @@ We bring to you the all in one, from payment to reservation to seeing the curren
 * [Matthew](https://github.com/matthewfrancisong)
 * [Joseph](https://github.com/josephpung)
 
-## Installation
-```javascript
-yarn install
-```
 ## ERD
 ![](public/assets/images/ERD(3).png)
 
 ## User Stories
+
+## To Do List (Final Week) 
+**No.** | **Completed Tasks** | -- | **Completion Date** | --
+| ~~Split users and staff. Settle Nav Bars~~ | High | 07/12 (Thursday) | Jo
+| ~~Kitchen Interface for chefs~~ | Medium | 05/12 (Tuesday) | Matt
+| ~~Implement Redux so that we have passport authentication for users ~~| **HIGH** | 04/12 (Monday ) | Jo
+| ~~Implement sockets so that staff can see real time that changes are made to orders ~~| HIGH |04/12 (Monday) | Jo
+| ~~Settle staff and user orders interfaces~~| HIGH | Yuki
 
 
 ## To Do List
@@ -36,6 +40,10 @@ No. | Description | Importance | Due Date | PIC
 3| ~~Come up with working staff/owner interface~~ | Medium | 24/11 (Friday) | Jo
 4| ~~Come up with basic working user interface~~ | Medium | 24/11 (Friday) | Matt
 5| ~~Allow cards to be saved and used (Stripe API)~~ | **HIGH** | 24/11 (Friday) | Yuki
+
+
+
+
 
 ## Potential Improvements
 * Add Queue and Reservation system
