@@ -33,7 +33,7 @@ No. | Description | Importance | Due Date | PIC
 6| ~~Come up with frontend interface~~ | Medium | 29/11 (Wed) | Matt & Yuki
 7| ~~Add kitchen interface with orders and capability to modify orders ~~| Medium | 24/11 (Friday) | Matt
 8| ~~Functioning POS system | **HIGH** ~~| 25/11 (Sat) | Jo
-9| ~~Integrate React ~~| **HIGH** | ASAP | Jo
+9| ~~Integrate React ~~| **HIGH** | HIGH | Jo
 10| ~~Come up with database models~~| Medium | 22/11 (Wed)| Jo
 11| ~~Come up with basic layout~~| **HIGH** | 22/11/2017(Wed) | -
 12| ~~Come up with working staff/owner interface~~ | Medium | 24/11 (Friday) | Jo
