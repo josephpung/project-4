@@ -18,29 +18,27 @@ We bring to you the all in one, from payment to reservation to seeing the curren
 
 ## User Stories
 
-## To Do List (Final Week) 
-**No.** | **Completed Tasks** | -- | **Completion Date** | --
-| ~~Split users and staff. Settle Nav Bars~~ | High | 07/12 (Thursday) | Jo
-| ~~Kitchen Interface for chefs~~ | Medium | 05/12 (Tuesday) | Matt
-| ~~Implement Redux so that we have passport authentication for users ~~| **HIGH** | 04/12 (Monday ) | Jo
-| ~~Implement sockets so that staff can see real time that changes are made to orders ~~| HIGH |04/12 (Monday) | Jo
-| ~~Settle staff and user orders interfaces~~| HIGH | Yuki
+
 
 
 ## To Do List
 No. | Description | Importance | Due Date | PIC
 --------  |--- | :---: | --- | --  
-1| Come up with frontend interface | Medium | 29/11 (Wed) | -
-2| Add kitchen interface with orders and capability to modify orders | Medium | 24/11 (Friday) | NIL
-3| Functioning POS system | **HIGH** | 25/11 (Sat) | NIL
-4| Integrate React | **HIGH** | ASAP | NIL
 **No.** | **Completed Tasks** | -- | **Completion Date** | --
-1| ~~Come up with database models~~| Medium | 22/11 (Wed)| Jo
-2| ~~Come up with basic layout~~| **HIGH** | 22/11/2017(Wed) | -
-3| ~~Come up with working staff/owner interface~~ | Medium | 24/11 (Friday) | Jo
-4| ~~Come up with basic working user interface~~ | Medium | 24/11 (Friday) | Matt
-5| ~~Allow cards to be saved and used (Stripe API)~~ | **HIGH** | 24/11 (Friday) | Yuki
-
+1| ~~Split users and staff. Settle Nav Bars~~ | High | 07/12 (Thursday) | Jo
+2| ~~Kitchen Interface for chefs~~ | Medium | 05/12 (Tuesday) | Matt
+3| ~~Implement Redux so that we have passport authentication for users ~~| **HIGH** | 04/12 (Monday ) | Jo
+4| ~~Implement sockets so that staff can see real time that changes are made to orders ~~| HIGH |04/12 (Monday) | Jo
+5| ~~Settle staff and user orders interfaces~~| HIGH | Yuki
+6| ~~Come up with frontend interface~~ | Medium | 29/11 (Wed) | Matt & Yuki
+7| ~~Add kitchen interface with orders and capability to modify orders ~~| Medium | 24/11 (Friday) | Matt
+8| ~~Functioning POS system | **HIGH** ~~| 25/11 (Sat) | Jo
+9| ~~Integrate React ~~| **HIGH** | HIGH | Jo
+10| ~~Come up with database models~~| Medium | 22/11 (Wed)| Jo
+11| ~~Come up with basic layout~~| **HIGH** | 22/11/2017(Wed) | -
+12| ~~Come up with working staff/owner interface~~ | Medium | 24/11 (Friday) | Jo
+13| ~~Come up with basic working user interface~~ | Medium | 24/11 (Friday) | Matt
+14| ~~Allow cards to be saved and used (Stripe API)~~ | **HIGH** | 24/11 (Friday) | Yuki
 
 
 
