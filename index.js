@@ -9,7 +9,14 @@ const methodOverride = require('method-override')
 const flash = require("connect-flash")
 const app = express()
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server)
+const cors = require('cors')
+const mongoose = require('mongoose')
+const dbUrl = process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost/proj4local'
+const port = process.env.PORT || 8000
+
+// stripe payment
+const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret key must be in .env file
 require("dotenv").config({silent: true})
 
 
@@ -33,9 +40,6 @@ var hbs = exphbs.create({
 }
     }
 })
-
-// stripe payment
-const stripe = require('stripe')('sk_test_Mjeo02fveFmPGmRNRWUiLN1j') // secret key must be in .env file
 
 app.post('/charge', function(req, res) {
   stripe.customers.create({
@@ -62,50 +66,46 @@ app.post('/charge', function(req, res) {
 app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+// setup build path for react frontend
+app.use(express.static(path.join(__dirname, 'client/build')))
 
-const mongoose = require('mongoose')
-const dbUrl =
-process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI : 'mongodb://localhost/proj4local'
-const port = process.env.PORT || 8000
-// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/proj4local')
 mongoose.connect(dbUrl, {
   useMongoClient: true
 })
+
+//allow callback
 mongoose.Promise = global.Promise
+
 // ======== Setting up Sessions AFTER connecting to mongoose ===== //
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true, //saves session and stores it in DB
-  store: new MongoStore({ mongooseConnection: mongoose.connection }) // store it in MongoDB, this requires mongo-connect to work
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 // ====== set up flash ======
 app.use(flash())
+
 // setup methodOverride
 app.use(methodOverride('_method'))
+
 //=== Setup passport
 app.use(passport.initialize())
 app.use(passport.session())
+
 // ===== Set up bodyparser
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+// set up local variable for user data
 app.use((req,res,next)=>{
   app.locals.currentUser = req.user ? req.user : null
   next()
 })
 
-//Access models
-const Restaurant = require("./models/restaurant")
-const Restotable = require("./models/restotable")
-const User = require("./models/user")
-const Item = require("./models/item")
-
 // allow cors
-var cors = require('cors')
 app.use(cors())
 
 // load route files
@@ -119,9 +119,6 @@ app.use("/authentication", authentication_routes)
 app.use("/display_data", display_data_routes)
 app.use("/user",user_routes)
 app.use("/staff", staff_routes)
-
-
-
 
 // sockets setup
 io.on('connection', (socket) => {
@@ -140,7 +137,6 @@ io.on('connection', (socket) => {
   })
   // here you can start emitting events to the client
 });
-
 
 // io.listen(port);
 server.listen(port)
